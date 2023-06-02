@@ -1,0 +1,1 @@
+Django will collect static files here for whitenoise
