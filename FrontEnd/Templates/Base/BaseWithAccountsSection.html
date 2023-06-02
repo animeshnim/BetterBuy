@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <!-- Static Files -->
+    {% load static %}
+
+
+    <!-- CSS -->
+    <!-- Line Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
+    
+    <!-- Tailwind Input CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+
+    <!-- Page Specific CSS -->
+    {% block CSS %}  {% endblock %}
+    <!-- End of Page Specific CSS -->
+
+
+
+    <!-- Page Title -->
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+</head>
+
+<body class="min-h-screen bg-slate-100">
+    <!-- Navigation Section -->
+    {% block navigation-bar %}  {% endblock %}
+    <!-- End of Navigation Section -->
+
+
+
+    <!-- Page Content -->
+    <section class="sm:block" id="main-content">
+        <main class="p-4 sm:p-4 grid gap-4 md:gap-6 sm:grid-cols-[19rem_1fr] md:grid-cols-[20rem_1fr]">
+            <!-- Menu Section -->
+            <section class="hidden sm:block" id="menu-section">
+                {% include "Base/Components/hamburger-menu.html" %}
+            </section>
+            <!-- End of Menu Section -->
+    
+    
+            <section>
+                <!-- Message Section -->
+                {% if messages %}
+                <section class="bg-transparent mb-4">
+                    {% include "Base/Components/alert-messages.html" %}
+                </section>
+                {% endif %}
+                <!-- End of Message Section -->
+        
+                
+                <!-- Message Section -->
+                {% block body %}  {% endblock %}
+                <!-- End of Message Section -->
+            </section>
+        </main>
+
+
+
+        <!-- Footer Section -->
+        {% include "Base/Components/footer-hidden-mobile-view.html" %}
+        <!-- End of Footer Section -->
+
+    </section>
+    <!-- End of Page Content -->
+</body>
+
+<script>
+    {% block script %}  {% endblock %}
+
+    function open_modal_button_action(element_id) {
+        let modal = document.querySelector(`#${element_id}`);
+        modal.classList.add('flex');
+        modal.classList.remove('hidden');
+        modal.setAttribute("data-state", "opened");
+    }
+    
+    function close_modal_button_action() {
+        let modals = document.querySelectorAll('[data-state="opened"]');
+    
+        for (modal of modals) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            modal.setAttribute("data-state", "closed");
+        }
+    }
+</script>
+
+</html>

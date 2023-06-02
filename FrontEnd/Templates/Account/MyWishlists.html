@@ -1,0 +1,62 @@
+{% extends "Base/BaseWithAccountsSection.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} My Wishlists | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-without-mobile-search.html" with page_title='My Wishlists' cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<!-- Heading -->
+<header class="text-xl font-bold mb-4 hidden sm:block">My Wishlists</header>
+<!-- End of Heading -->
+
+
+<!-- My Wishlists -->
+<section class="grid gap-6 md:gap-4">
+    <div class="grid gap-2">
+        {% if wishlists|length == 0 %}
+        <div>No Wishlists to Display</div>
+        
+        {% else %}
+        {% for wishlist in wishlists %}
+        <a href="{% url 'WishlistPage' wishlist.unique_id %}">
+            <div class="p-4 text-lg font-semibold bg-white rounded-lg">{{wishlist.name}}</div>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <div>
+        <form action="{% url 'create-new-wishlist' %}" class="flex gap-2">
+            <input type="text" name="wishlist-name" id="wishlist-name-input" placeholder="Wishlist Name" class="hidden outline-none rounded-full px-3 py-1 bg-white" required>
+            <button type="submit" onclick="new_wishlist_button_action()" id="new-wishlist-button" class="px-3 py-2 rounded-full bg-blue-700 text-white">Create New Wishlist</button>
+        </form>
+    </div>
+</section>
+<!-- End of My Wishlists -->
+
+{% endblock %}
+
+
+
+{% block script %}
+
+function new_wishlist_button_action() {
+    let wishlist_name_input = document.querySelector('#wishlist-name-input');
+    let new_wishlist_button = document.querySelector('#new-wishlist-button');
+    wishlist_name_input.style.display = 'block';
+    new_wishlist_button.innerHTML = "Create"
+}
+
+{% endblock %}

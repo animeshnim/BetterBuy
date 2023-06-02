@@ -1,0 +1,73 @@
+<!-- Hamburger Menu -->
+<section id="hamburger-menu" class="rounded-lg">
+    <!-- Profile Section -->
+    <section>
+        <!-- Profile -->
+        {% if user.is_authenticated %}
+        <a href="{% url 'AccountPage' %}" class="px-3 py-4 rounded-t-lg grid gap-3 grid-cols-[3rem_1fr] bg-pink-300">
+            <img src="" alt="" class="bg-violet-300 aspect-square rounded-full">
+            <div class="flex flex-col justify-center">
+                <div class="text-xs">Welcome,</div>
+                <div class="font-medium">{{request.user.individualuseraccount.full_name}}</div>
+            </div>
+        </a>
+
+        {% else %}
+        <div class="px-3 py-8 rounded-t-lg bg-pink-300">
+            <a href="{% url 'LoginPage' %}" class="font-medium px-4 py-2 rounded-full bg-yellow-400 hover:bg-yellow-300">Login to Your Account</a>
+        </div>
+        {% endif %}
+        <!-- End of Profile -->
+        
+        <!-- Profile Options -->
+        <div class="px-4 py-2 grid gap-2 bg-white">
+            {% if request.user.account_type == "Business" %}
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">Manage Your Account <i class="las la-gem"></i></a>
+            {% else %}
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">Upgrade to Business Account <i class="las la-gem"></i></a>
+            {% endif %}
+
+            {% if request.user.is_seller %}
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">Manage Your Seller Account <i class="las la-gem"></i></a>
+            {% else %}
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">Become a Seller <i class="las la-gem"></i></a>
+            {% endif %}
+        </div>
+        <!-- End of Profile Options -->
+    </section>
+    <!-- End of Profile Section -->
+    
+    <!-- Options Section -->
+    <section class="px-4 grid bg-white rounded-b-lg">
+        <!-- Product Options -->
+        <div class="border-t border-gray-500 py-2 grid gap-2">
+            <a href="{% url 'Orders' %}" class="px-4 py-2 rounded-full hover:bg-yellow-200">My Orders</a>
+            <a href="{% url 'CartPage' %}" class="px-4 py-2 rounded-full hover:bg-yellow-200">My Cart</a>
+            <a href="{% url 'Wishlists' %}" class="px-4 py-2 rounded-full hover:bg-yellow-200">My Wishlists</a>
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">My Reviews <i class="las la-gem"></i></a>
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">My Questions <i class="las la-gem"></i></a>
+        </div>
+        <!-- End of Product Options -->
+        
+        <!-- Help Center Options -->
+        <div class="border-t border-gray-500 py-2 grid gap-2 rounded-b-lg">
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">About Us <i class="las la-gem"></i></a>
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">FAQ's <i class="las la-gem"></i></a>
+            <a class="px-4 py-2 rounded-full hover:bg-yellow-200">Contact Us <i class="las la-gem"></i></a>
+        </div>
+        <!-- End of Help Center Options -->
+    </section>
+    <!-- End of Options Section -->
+
+    {% if user.is_authenticated %}
+    <!-- Logout Button -->
+    <form action="{% url 'Logout' %}" method="post" class="mt-2 rounded-lg bg-yellow-400 hover:bg-yellow-300">{% csrf_token %}
+        <button type="submit" class="profile-button flex w-full gap-1 font-semibold justify-center items-center p-4">
+            <i class="las la-power-off text-2xl"></i>
+            <div>Logout</div>
+        </button>
+    </form>
+    <!-- End of Logout Button -->
+    {% endif %}
+</section>
+<!-- End of Hamburger Menu -->

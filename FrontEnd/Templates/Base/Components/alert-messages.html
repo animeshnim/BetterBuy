@@ -1,0 +1,7 @@
+<section class="alert-messages">
+    {% if messages %}
+    {% for message in messages %}
+    <p {% if message.tags %} class="{{message.tags}} px-4 py-2 rounded-xl" {% endif %}>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+</section>

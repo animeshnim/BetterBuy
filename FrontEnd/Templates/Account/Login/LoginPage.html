@@ -1,0 +1,32 @@
+{% extends "Base/BaseForAccountRelatedForms.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} Login Page | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+{% block heading %}Login to Your Account{% endblock %}
+
+
+<!-- Form Block -->
+{% block form-body %}
+<form action="" method="post" class="flex flex-col gap-4">{% csrf_token %}
+    <div>
+        <label for="login-email" class="block mb-2">Email</label>
+        <input type="email" name="login-email" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+    </div>
+    <div>
+        <label for="login-password" class="block mb-2">Password</label>
+        <input type="password" name="login-password" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+        <div class="mt-1 text-xs text-right"><a href="{% url 'ForgotPasswordPage' %}">Forgot Password?</a></div>
+    </div>
+    <div class="mt-6 flex justify-between">
+        <a href="{% url 'IndividualSignUpPage' %}" class="block px-6 py-3 rounded-full hover:bg-yellow-100">Signup</a>
+        <button type="submit" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-300 rounded-full">Login</button>
+    </div>
+</form>
+
+{% endblock %}
+<!-- End of Form Block -->

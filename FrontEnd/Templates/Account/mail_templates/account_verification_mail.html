@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" style="line-height: 1.5; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-variation-settings: normal; font-feature-settings: normal;">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<style>
+    *,
+    ::before,
+    ::after {
+        box-sizing: border-box; /* 1 */
+        border-width: 0; /* 2 */
+        border-style: solid; /* 2 */
+        border-color: #e5e7eb; /* 2 */
+        margin: 0;
+        padding: 0;
+    }
+
+
+    html {
+        line-height: 1.5; /* 1 */
+        -webkit-text-size-adjust: 100%; /* 2 */
+        -moz-tab-size: 4; /* 3 */
+        -o-tab-size: 4;
+            tab-size: 4; /* 3 */
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+        font-feature-settings: normal; /* 5 */
+        font-variation-settings: normal; /* 6 */
+    }
+
+
+    body {
+        margin: 0; /* 1 */
+        line-height: inherit; /* 2 */
+        padding: 2rem 1rem;
+    }
+
+
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+
+
+    h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    section {
+        display: grid;
+        gap: 2.5rem;
+    }
+
+    .center-div {
+        text-align: center;
+    }
+
+    #verification-button {
+        padding: 1rem 1.5rem;
+        background-color: rgb(253 224 71 / 1);
+        border-radius: 9999px;
+    }
+
+    #verification-link {
+        color: blue;
+    }
+
+    .font-medium {
+        font-weight: 500;
+    }
+
+    .gap-div {
+        display: grid;
+        gap: 0.5rem;
+    }
+</style>
+
+<body>
+    <h2 class="text-center">Welcome to BetterBuy</h2>
+    <section>
+        <div class="gap-div">
+            <p class="font-medium">Before you go to BetterBuy, please verify your email address</p>
+            <p>Why do you ask? We need to make sure that it is a valid email address so that we can connect with you.</p>
+            <p>If you haven't created an account using this email address, please contact us at ................</p>
+        </div>
+        <div>
+            <a href="{{token}}" id="verification-button">Verify Your Email</a>
+        </div>
+        <div>
+            <p>Or verify using the below link</p>
+            <p id="verification-link">{{token}}</p>
+        </div>
+    </section>
+</body>
+</html>

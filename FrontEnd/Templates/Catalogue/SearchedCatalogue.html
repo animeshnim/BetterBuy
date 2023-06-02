@@ -1,0 +1,153 @@
+{% extends "Base/Base.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} Products | Search | {{your_query}} {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+<!-- Navigation Section -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-with-search-button.html" with page_title_left='Search Results' cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<section class="">
+    <!-- Message Section -->
+    {% if messages %}
+    <section class="bg-transparent px-2 py-2">
+        {% include "Base/Components/alert-messages.html" %}
+    </section>
+    {% endif %}
+    <!-- End of Message Section -->
+    
+
+
+    <!-- Main Section -->
+    <main class="catalogue-page bg-slate-100 p-2 md:p-4 lg:px-6 lg:py-4 grid gap-2 md:gap-4 sm:grid-cols-[2fr_3fr] md:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_2.5fr] xl:grid-cols-[1fr_3fr]">
+        
+        <!-- Status Bar -->
+        <section class="p-2 rounded-lg bg-red-200 font-semibold flex justify-between">
+            <div class="hidden sm:flex gap-2">
+                <a href="{% url 'HomePage' %}">Home</a>
+                <span class="font-extrabold"> > </span>
+                <div>{{your_query}}</div>
+            </div>
+            {% if products.count == 1 %}
+            <div>Fetched {{products.count}} Product</div>
+            {% else %}
+            <div>Fetched {{products.count}} Products</div>
+            {% endif %}
+        </section>
+        <!-- End of Status Bar -->
+
+
+        <!-- Filter Bar -->
+        <section class="p-2 rounded-lg bg-blue-200 font-semibold sm:row-start-1 sm:col-start-1 sm:row-span-2">Filters</section>
+        <!-- End of Filter Bar -->
+
+
+        <!-- Products Section -->
+        <section class="products-section grid gap-2 lg:grid-cols-2">
+            {% if products.count == 0 %}
+            <div class="md:col-span-2">
+                <div class="text-center py-4">No Products Found for <span class="font-medium">{{your_query}}</span></div>
+                <div class="pt-6 pr-4 pb-2 pl-10 grid gap-2">
+                    <header class="text-sm font-medium">Suggestions:</header>
+                    <ul class="list-disc">
+                        <li class="text-sm">Make sure all the words are spelled correctly.</li>
+                        <li class="text-sm">Try different keywords.</li>
+                        <li class="text-sm">Try more general keywords.</li>
+                    </ul>
+                </div>
+            </div>
+            {% else %}
+            {% for product in products %}
+            <!-- Product -->
+            <section class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[6rem_1fr_24px]">
+                <a href="{% url 'ProductPage' product.slug %}">
+                    <!-- Product Image and Tag -->
+                    <div class="flex flex-col gap-2 justify-center">
+                        <img src="/media/{{product.product_thumbnail.image}}" alt="P-Image" class="w-[6rem] h-full">
+                    </div>
+                    <!-- End of Product Image and Tag -->
+                </a>
+
+                <!-- Product Details -->
+                <div class="grid gap-1">
+                    <!-- Product Name -->
+                    <a href="{% url 'ProductPage' product.slug %}">
+                        <div class="font-semibold">{{product.product_name}}</div>
+                        <div class="text-sm font-medium text-gray-600">
+                            <div>{{product.colour}}, {{product.variant}}</div>
+                        </div>
+                    </a>
+                    <!-- End of Product Name -->
+
+                    <!-- Product Reviews -->
+                    <a href="{% url 'ProductPage' product.slug %}">
+                        <div class="text-sm flex items-center gap-2">
+                            <div class="px-3 my-1 bg-green-600 rounded-full">4.2</div>
+                            <div class="text-gray-600">(4400 Ratings)</div>
+                        </div>
+                    </a>
+                    <!-- End of Product Reviews -->
+
+                    <!-- Product Price -->
+                    <a href="{% url 'ProductPage' product.slug %}">
+                        <div class="text-sm flex gap-2">
+                            <div>Rs. {{product.selling_price}}</div>
+                            <div class="line-through">Rs. {{product.max_retail_price}}</div>
+                        </div>
+                    </a>
+                    <!-- End of Product Price -->
+
+                    <!-- Product Delivery Details -->
+                    <a href="{% url 'ProductPage' product.slug %}">
+                        <div class="text-sm flex gap-2">Delivery Details</div>
+                    </a>
+                    <!-- End of Product Delivery Details -->
+                </div>
+                <!-- End of Product Details -->
+
+                <!-- Utility Buttons -->
+                <div>
+                    <a href="{% url 'add-to-cart' product.slug 1 %}"><i class="las la-cart-plus text-2xl"></i></a>
+                    <button onclick="open_modal_button_action('add-to-wishlist-modal'); set_value_of_product_slug(this.value)" value="{{product.slug}}"><i class="las la-bookmark text-2xl"></i></button>
+                </div>
+                <!-- End of Utility Buttons -->
+            </section>
+            <!-- End of Product -->
+            {% endfor %}
+            {% endif %}
+        </section>
+        <!-- End of Products Section -->
+    </main>
+    <!-- End of Main Section -->
+
+
+
+    <!-- Add to Wishlist Modal -->
+    <section class="hidden" id="add-to-wishlist-modal">
+        {% include "Base/Components/add-to-wishlist-modal.html" %}
+    </section>
+    <!-- End of Add to Wishlist Modal -->
+</section>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+
+<!-- Page Script -->
+{% block script %}
+
+{% endblock %}
+<!-- End of Page Script -->

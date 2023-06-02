@@ -1,0 +1,254 @@
+{% extends "Base/Base.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} My Cart | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+{% block navigation-bar %}
+
+<!-- Navigation Section -->
+    {% include "Base/Components/navigation-bar-without-mobile-search.html" with page_title='My Cart' cart_state='hidden' wishlist_state='block' %}
+<!-- End of Navigation Section -->
+
+{% endblock %}
+
+
+
+{% block body %}
+
+<main class="sm:block" id="main-content">
+    <!-- Message Section -->
+    {% if messages %}
+    <section class="bg-transparent px-2 py-2">
+        {% include "Base/Components/alert-messages.html" %}
+    </section>
+    {% endif %}
+    <!-- End of Message Section -->
+    
+
+    {% if cart_items.count == 0 %}
+    <div class="flex flex-col items-center justify-center pt-10 px-6 gap-6">
+        <div class="text-lg font-semibold">Your Cart is Empty</div>
+        <a href="{% url 'HomePage' %}" class="px-5 py-3 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring">Shop Now</a>
+    </div>
+
+    {% else %}
+    <!-- Main Section -->
+    <form action="{% url 'OrderSummary' %}" method="post">{% csrf_token %}
+        <section class="cart-page p-2 md:p-4 lg:px-6 lg:py-4 grid gap-2 md:gap-4 md:grid-cols-[1fr_20rem] lg:grid-cols-[1fr_24rem]">
+            <!-- Status Bar -->
+            <section class="p-2 rounded-lg bg-red-200 font-semibold md:col-span-2">Status Bar</section>
+            <!-- End of Status Bar -->
+
+            <!-- Addresses and Cart Products Section -->
+            <section class="grid p-2 sm:px-4 sm:py-2 gap-4">
+                <!-- Addresses Section -->
+                <section class="grid mb-6">
+                    <header class="text-lg font-bold mb-4">Shipping To:</header>
+                    <div class="grid">
+                        <div class="grid gap-3 mb-6">
+                            {% if addresses.count == 0 %}
+                            <input type="radio" name="shipping-address-slug" required class="hidden">
+                            <div class="">No Saved Addresses. You'll not be able to order your item without an address</div>
+                            {% else %}
+                            {% for address in addresses %}
+                            <div>
+                                {% if address.default == True %}
+                                <input type="radio" name="shipping-address-slug" value={{address.slug}} checked required>
+                                <label for="shipping-address">
+                                    <span class="font-semibold">{{address.name}}</span><br>
+                                    <span class="">{{address.address}}</span>
+                                </label>
+                                {% else %}
+                                <input type="radio" name="shipping-address-slug" value={{address.slug}} required>
+                                <label for="shipping-address">
+                                    <span class="font-semibold">{{address.name}}</span><br>
+                                    <span class="">{{address.address}}</span>
+                                </label>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div>
+                            <button type="button" onclick="open_modal_button_action('add-new-address-modal')" class="px-3 py-2 rounded-full bg-blue-700 text-white">Add New Address</button>
+                        </div>
+                </section>
+                <!-- Addresses Section -->
+
+
+                <!-- Cart Products Section -->
+                <section class="grid gap-2">
+                    <!-- Title Bar -->
+                    <header class="text-lg font-bold mb-2">Items in Your Cart</header>
+                    <!-- End of Title Bar -->
+
+
+                    {% for cart_item in cart_items %}
+                    <!-- Cart Product -->
+                    <div class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[6rem_1fr] lg:grid-cols-[6rem_2fr_1.7fr_30px]">
+                        <!-- Product Image -->
+                        <a href="{% url 'ProductPage' cart_item.product.slug %}"><img src="/media/{{cart_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[6rem] min-h-full"></a>
+                        <!-- End of Product Image -->
+
+                        <!-- Product Details -->
+                        <a href="{% url 'ProductPage' cart_item.product.slug %}" class="flex flex-col justify-between">
+                            <div>
+                                <div class="font-semibold">{{cart_item.product.product_name}}</div>
+                                <div class="text-sm font-medium text-gray-600">
+                                    <div>{{cart_item.product.colour}}, {{cart_item.product.variant}}</div>
+                                </div>
+                                <div class="text-sm flex items-center gap-2">
+                                    <div class="px-3 my-1 bg-green-600 rounded-full">4.2</div>
+                                    <div class="text-gray-600">(4400 Ratings)</div>
+                                </div>
+                            </div>
+                            <div class="text-sm"><span class="font-medium">Sold By: </span>{{cart_item.product.product_structure.seller}}</div>
+                        </a>
+                        <!-- End of Product Details -->
+
+                        <!-- Quantity and Pricing Details -->
+                        <div class="col-span-2 lg:col-span-1 flex flex-row-reverse justify-end gap-2 lg:flex lg:flex-col lg:justify-start lg:pl-4">
+                            <div class="flex gap-2">
+                                <span class="text-sm font-medium hidden lg:block">Selling Price :</span>
+                                <span>Rs. {{cart_item.product.selling_price}}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="text-sm font-medium hidden lg:block">Quantity :</div>
+                                <div class="quantity w-[6rem] lg:col-start-2 flex justify-center">
+                                    <div class="rounded-full bg-white h-fit max-h-fit w-fit min-w-fit">
+                                        <a href="{% url 'change-quantity' %}?cart-item-id={{cart_item.unique_id}}&req-type=sub" class="bg-yellow-400 rounded-l-full px-1">
+                                            <i class="las la-minus"></i>
+                                        </a>
+                                        <input type="number" value="{{cart_item.quantity}}" min="1" max="9" class="outline-none w-8 text-center" readonly />
+                                        <a href="{% url 'change-quantity' %}?cart-item-id={{cart_item.unique_id}}&req-type=add" class="bg-yellow-400 rounded-r-full px-1">
+                                            <i class="las la-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden lg:flex gap-2">
+                                <span class="text-sm font-medium hidden lg:block">Total Price :</span>
+                                <span>{{cart_item.get_cart_item_total}}</span>
+                            </div>
+                        </div>
+                        <!-- End of Quantity and Pricing Details -->
+                        
+                        <!-- Utility Buttons -->
+                        <div class="col-span-2 lg:col-span-1 gap-2 grid grid-cols-2 lg:flex lg:flex-col lg:justify-between mt-2 lg:mt-0 lg:ml-2">
+                            <!-- Add to Wishlist Button -->
+                            <button type="button" onclick="open_modal_button_action('add-to-wishlist-modal'); set_value_of_product_slug(this.value)" value="{{cart_item.product.slug}}">
+                                <div class="lg:hidden text-center bg-yellow-400 rounded-full px-2 py-1">Add to Wishlist</div>
+                                <div class="hidden lg:block text-center"><i class="las la-bookmark text-2xl"></i></div>
+                            </button>
+                            <!-- End of Add to Wishlist Button -->
+
+                            <!-- Remove from Cart Button -->
+                            <a href="{% url 'remove-from-cart' %}?cart-item-id={{cart_item.unique_id}}">
+                                <div class="lg:hidden text-center bg-yellow-400 rounded-full px-2 py-1">Remove</div>
+                                <div class="hidden lg:block text-center"><i class="las la-trash text-2xl"></i></div>
+                            </a>
+                            <!-- End of Remove from Cart Button -->
+                        </div>
+                        <!-- End of Utility Buttons -->
+                    </div>
+                    <!-- End of Cart Product -->
+                    {% endfor %}
+                </section>
+                <!-- End of Cart Products Section -->
+            </section>
+            <!-- End of Addresses and Cart Products Section -->
+
+
+            <!-- Section -->
+            <section class="md:col-start-2 md:row-start-2 md:row-span-2 grid gap-1 md:gap-2">
+                <div>
+                    <!-- Invoice -->
+                    <div class="p-2 bg-blue-200 rounded-lg grid gap-4">
+                        <!-- Invoice Header -->
+                        <header class="text-xl font-bold pt-3 pb-5 px-2 border-b-2 border-gray-600 flex justify-between">Invoice</header>
+                        <!-- End of Invoice Header -->
+
+                        <!-- Particulars -->
+                        <div class="grid gap-2 font-medium px-2">
+                            <div class="flex justify-between">
+                                <div>Cart Total</div>
+                                <div>Rs. {{request.user.get_cart_total}}</div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div>Discount on MRP</div>
+                                <div class="text-green-700">- Rs. ________ </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div>Shipping Charges</div>
+                                <div>+ Rs. ________ </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div>Additional Discounts</div>
+                                <div class="text-green-700">- Rs. ________ </div>
+                            </div>
+                        </div>
+                        <!-- End of Particulars -->
+
+                        <!-- Billing Amount -->
+                        <footer class="text-lg font-semibold pb-3 pt-5 px-2 border-t-2 border-gray-600 flex justify-between">
+                            <div>Grand Total</div>
+                            <div>Rs. ____________ </div>
+                        </footer>
+                        <!-- End of Billing Amount -->
+
+                        
+                        <!-- Checkout Button -->
+                        <button type="submit" class="hidden md:block text-center bg-yellow-400 rounded-full px-3 py-2">Proceed to Checkout</button>
+                        <!-- End of Checkout Button -->
+                    </div>
+                    <!-- End of Invoice -->
+                </div>
+            </section>
+            <!-- End of Section -->
+
+
+            <!-- Checkout Button -->
+            <section class="md:hidden fixed bottom-0 w-full bg-slate-50 py-4">
+                <section class="px-2 rounded-xl bg-slate-50 flex items-center justify-between">
+                    <div>
+                        <div class="font-semibold">Grand Total :</div>
+                        <div class="">Rs. {{request.user.get_cart_total}}</div>
+                    </div>
+                    <button type="submit" class="text-center bg-yellow-400 rounded-full px-4 py-2">Proceed to Checkout</a>
+                </section>
+            </section>
+            <!-- End of Checkout Button -->
+        </section>
+    </form>
+    <!-- End of Main Section -->
+    {% endif %}
+
+    
+
+    <!-- Add to Wishlist Modal -->
+    <section class="hidden" id="add-to-wishlist-modal">
+        {% include "Base/Components/add-to-wishlist-modal.html" %}
+    </section>
+    <!-- End of Add to Wishlist Modal -->
+
+
+    <!-- Add New Address Modal -->
+    <section class="hidden col-span-2" id="add-new-address-modal">
+        {% include "Base/Components/add-new-address-modal.html" %}
+    </section>
+    <!-- End of Add New Address Modal -->
+</main>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+{% block script %}
+
+{% endblock %}

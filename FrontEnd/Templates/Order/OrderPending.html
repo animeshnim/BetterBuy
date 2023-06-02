@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <!-- Static Files -->
+    {% load static %}
+
+
+    <!-- CSS -->
+    <!-- Line Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
+    
+    <!-- Tailwind Input CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+    <!-- Page Title -->
+    <title>Order Status | Pending</title>
+</head>
+
+<body>
+    <main class="flex justify-center items-center min-w-[100vw] min-h-[100vh]">
+        <section class="flex-col items-center px-12 py-8">
+            <h1 class="text-xl sm:text-2xl font-bold text-center mb-6">Your Order is Pending</h1>
+            <div class="flex flex-col gap-2 mb-10">
+                <p class="text-center">Go to your orders to pay and confirm your order.</p>
+            </div>
+            <div class="flex justify-center">
+                <a href="{% url 'Orders' %}" class="px-5 py-3 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring">Go to My Orders</a>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

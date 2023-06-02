@@ -1,0 +1,150 @@
+{% extends "Base/BaseWithAccountsSection.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} My Account | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-without-mobile-search.html" with page_title='My Account' cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<section>
+    <!-- Heading -->
+    <header class="text-xl font-bold mb-6">My Account</header>
+    <!-- End of Heading -->
+    
+    <!-- Account Section -->
+    <section class="grid gap-10">
+        <!-- Personal Information Section -->
+        <div class="grid gap-2 md:grid-cols-[16ch_1fr]">
+            <div class="flex items-center gap-4 md:col-span-2 mb-2">
+                <header class="text-lg font-bold">Personal Information</header>
+                <button type="button" onclick="open_modal_button_action('account-details-change-modal')"><i class="las la-edit text-xl"></i></button>
+            </div>
+            {% if user.account_type == 'INDIVIDUAL' %}
+            {% if user.is_seller == False %}
+            <div class="font-medium">Full Name</div>
+            <div class="mb-2">{{user.individualuseraccount.full_name}}</div>
+            <div class="font-medium">Email</div>
+            <div class="mb-2">{{user.email}}</div>
+            <div class="font-medium">Date of Birth</div>
+            <div class="mb-2">{{user.individualuseraccount.date_of_birth}}</div>
+            <div class="font-medium">Gender</div>
+            <div class="mb-2">{{user.individualuseraccount.gender|lower|title}}</div>
+            <div class="font-medium">Account Type</div>
+            <div class="mb-2">{{user.account_type|lower|title}}</div>
+            <div class="font-medium">Is a Seller</div>
+            <div class="mb-2">No</div>
+            {% endif %}
+            {% endif %}
+            <div class="md:col-span-2 mt-2">
+                <button type="button" onclick="open_modal_button_action('password-change-modal')" class="px-3 py-2 rounded-full bg-blue-700 text-white">Change Password</button>
+            </div>
+        </div>
+        <!-- End of Personal Information Section -->
+
+        
+        <!-- Address Section -->
+        <div class="grid gap-2 md:grid-cols-2">
+            <div class="md:col-span-2 flex flex-wrap justify-between items-center">
+                <header class="text-lg font-bold">My Addresses</header>
+                <div class=""><button type="button" onclick="open_modal_button_action('add-new-address-modal')" class="px-3 py-2 rounded-full bg-blue-700 text-white">Add New Address</button></div>
+            </div>
+            {% if addresses.count == 0 %}
+            <div class="md:col-span-2">No Saved Addresses to Show</div>
+            {% else %}
+            {% for address in addresses %}
+            <div class="md:grid grid-cols-[1fr_30px] bg-blue-200 rounded-xl px-3 py-2">
+                <div class="md:col-span-2 flex gap-1 mb-2">
+                    {% if address.default %}
+                    <div class="px-2 bg-green-500 rounded-full">Default</div>
+                    {% endif %}
+
+                    {% if address.address_type == 'HOME' %}
+                    <div class="px-2 bg-green-500 rounded-full">Home Address</div>
+                    {% elif address.address_type == 'WORK' %}
+                    <div class="px-2 bg-green-500 rounded-full">Office / Work Address</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-2">
+                    <div class="font-medium">{{address.name}}</div>
+                    <div>{{address.house_and_building}}, {{address.street_or_colony}}</div>
+                    {% if address.landmark %}
+                    <div>Near {{address.landmark}}, {{address.area}}</div>
+                    {% else %}
+                    <div>{{address.area}}</div>
+                    {% endif %}
+                    <div>{{address.city}}, {{address.district}} ({{address.state}}) - {{address.pincode}}</div>
+                    <div><span class="font-medium">Contact No: </span>{{address.contact_no}}</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 md:flex md:flex-col md:justify-between md:items-center">
+                    <button type="button" onclick="open_modal_button_action('edit-address-modal'); set_value_of_address_unique_id(this.value); set_input_values(this.dataset.type, this.dataset.name, this.dataset.contact, this.dataset.house, this.dataset.street, this.dataset.landmark, this.dataset.pincode, this.dataset.city, this.dataset.district, this.dataset.state, this.dataset.selected); prefill_area_details(this.dataset.pincode, this.dataset.area)" 
+                    value="{{address.unique_id}}" 
+                    data-type="{{address.address_type}}"
+                    data-name="{{address.name}}"
+                    data-contact="{{address.contact_no}}"
+                    data-house="{{address.house_and_building}}"
+                    data-street="{{address.street_or_colony}}"
+                    data-landmark="{{address.landmark}}"
+                    data-pincode="{{address.pincode}}"
+                    data-area="{{address.area}}"
+                    data-city="{{address.city}}"
+                    data-district="{{address.district}}"
+                    data-state="{{address.state}}"
+                    data-selected="{{address.default}}">
+                    <div class="md:hidden text-center bg-yellow-400 rounded-full px-4 py-2">Edit</div><i class="hidden md:block las la-pen-alt text-2xl"></i></button>
+                    <a href="{% url 'delete-address' address.unique_id %}"><div class="md:hidden text-center bg-yellow-400 rounded-full px-4 py-2">Delete</div><i class="hidden md:block las la-trash text-2xl"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <!-- End of Address Section -->
+    </section>
+    <!-- End of Account Section -->
+</section>
+
+
+
+<!-- Account Details Change Modal -->
+<section class="hidden col-span-2" id="account-details-change-modal">
+    {% include "Base/Components/account-details-change-modal.html" %}
+</section>
+<!-- End of Account Details Change Modal -->
+
+<!-- Password Change Modal -->
+<section class="hidden col-span-2" id="password-change-modal">
+    {% include "Base/Components/password-change-modal.html" %}
+</section>
+<!-- End of Password Change Modal -->
+
+<!-- Add New Address Modal -->
+<section class="hidden col-span-2" id="add-new-address-modal">
+    {% include "Base/Components/add-new-address-modal.html" %}
+</section>
+<!-- End of Add New Address Modal -->
+
+<!-- Edit Address Modal -->
+<section class="hidden col-span-2" id="edit-address-modal">
+    {% include "Base/Components/edit-address-modal.html" %}
+</section>
+<!-- End of Edit Address Modal -->
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+{% block script %}
+
+{% endblock %}

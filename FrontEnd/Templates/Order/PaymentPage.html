@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <!-- Static Files -->
+    {% load static %}
+
+
+    <!-- CSS -->
+    <!-- Line Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
+    
+    <!-- Tailwind Input CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+
+    <style>
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+      </style>
+
+    <!-- Page Title -->
+    <title>Payment | BetterBuy</title>
+</head>
+
+<body>
+    <main class="flex justify-center items-center min-w-[100vw] min-h-[100vh]">
+        <section id="old-data" class="flex flex-col items-center gap-10 px-12 py-8">
+            <div class="flex flex-col items-center gap-4">
+                <div class="loader"></div>
+                <div>Processing...</div>
+            </div>
+            <div class="flex flex-col items-center gap-4">
+                <div id="payment-redirect-warning" class="text-center">You will be redirected to payment page. It might take a few minutes.</div>
+                <div id="order-processing-warning" class="text-center hidden">Please Wait! We are processing your order. It might take a few minutes.</div>
+                <div class="text-center">Please do not refresh the page or click the "Back" Button or "Close" the browser.</div>
+            </div>
+        </section>
+        
+        <button id="rzp-button1" class="hidden px-6 py-3 bg-yellow-400 hover:bg-yellow-300 rounded-full">Proceed to payment</button>
+    </main>
+</body>
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    var options = {
+        "key": "",
+        "amount": "{{payment.amount}}",
+        "currency": "INR",
+        "name": "BetterBuy",
+        "description": "BetterBuy | Order: {{Order.unique_id}}",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{payment.id}}",
+        "callback_url": "{% url 'OrderPaymentSuccess' %}",
+
+        "prefill": {
+            "name": "{{request.user.individualuseraccount.full_name}}",
+            "email": "{{request.user.email}}",
+            "contact": "{{address.contact_no}}"
+        },
+
+        "notes": {
+            "Customer Address": "{{address}}"
+        },
+
+        "theme": {
+            "color": "#3399cc"
+        },
+
+        "modal": {
+            "ondismiss": function(){
+                location.replace("{% url 'order-pending' %}");
+            }
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    
+
+    // Automatic Payment Execution
+    window.onload = function() {
+        let pay_button = document.querySelector('#rzp-button1');
+        let payment_redirect_warning = document.querySelector('#payment-redirect-warning');
+        let order_processing_warning = document.querySelector('#order-processing-warning');
+
+        pay_button.click();
+        payment_redirect_warning.classList.add('hidden')
+        order_processing_warning.classList.remove('hidden')
+    }
+</script>
+
+</html>

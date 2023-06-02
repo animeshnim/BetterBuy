@@ -1,0 +1,200 @@
+{% extends "Base/Base.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} Order Summary | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+{% block body %}
+
+<form action="{% url 'PaymentPage' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="order-type" value="Pending">
+    <input type="hidden" name="order-id" value="{{order.unique_id}}">
+    <section class="cart-page p-2 md:p-4 lg:px-6 lg:py-4 grid gap-2 md:gap-4 md:grid-cols-[1fr_20rem] lg:grid-cols-[2fr_24rem]">
+        <!-- Status Bar -->
+        <section class="p-2 rounded-lg text-2xl font-bold md:col-span-2">Order Summary</section>
+        <!-- End of Status Bar -->
+
+        <!-- Address and Order Items Section -->
+        <section class="grid gap-4">
+            <!-- Address Section -->
+            <section class="grid p-4">
+                <header class="text-lg font-bold mb-4">Shipping Address</header>
+                <div class="grid gap-2">
+                    {% if addresses.count == 0 %}
+                    <input type="radio" name="shipping-address-slug" required class="hidden">
+                    <div class="">No Saved Addresses. You'll not be able to order your item without an address</div>
+                    {% else %}
+                    {% for address in addresses %}
+                    {% if address.default == True %}
+                    <div>
+                        <input type="radio" name="shipping-address-slug" id="selected-address" value={{address.slug}} class="hidden" checked>
+                        <label for="shipping-address">
+                            <span class="font-semibold">{{address.name}}</span><br>
+                            <span class="">{{address.address}}</span>
+                        </label>
+                    </div>
+                    {% else %}
+                    {% if addresses.count >= 1 %}
+                    <div class="other-address hidden">
+                        {% if address.default == False %}
+                        <input type="radio" name="shipping-address-slug" value={{address.slug}} class="" required>
+                        <label for="shipping-address">
+                            <span class="font-semibold">{{address.name}}</span><br>
+                            <span class="">{{address.address}}</span>
+                        </label>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="mt-4">
+                    <button type="button" id="change-address-button" onclick="change_address_button_action()" class="px-3 py-2 rounded-full bg-blue-700 text-white">Change Shipping Address</button>
+                </div>
+            </section>
+            <!-- Address Section -->
+
+
+            <!-- Order Items Section -->
+            <section class="grid gap-2 p-4">
+                <!-- Title Bar -->
+                <header class="text-lg font-bold mb-2">Items in this Order</header>
+                <!-- End of Title Bar -->
+
+
+                {% for order_item in order_items %}
+                <!-- Cart Product -->
+                <div class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[6rem_1fr] lg:grid-cols-[6rem_2fr_1fr]">
+                    <!-- Product Image -->
+                    <img src="/media/{{order_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[6rem]">
+                    <!-- End of Product Image -->
+
+                    <!-- Product Details -->
+                    <div class="grid gap-1">
+                        <div class="font-semibold">{{order_item.product.product_name}}</div>
+                        <div class="text-sm font-medium text-gray-600 mb-6">
+                            <div>{{order_item.product.colour}}, {{order_item.product.variant}}</div>
+                        </div>
+                        <div class="text-sm flex gap-2">
+                            <div class="font-medium">Sold By: </div>
+                            <div>{{order_item.product.product_structure.seller}}</div>
+                        </div>
+                    </div>
+                    <!-- End of Product Details -->
+
+                    <!-- Quantity and Pricing Details -->
+                    <div class="col-span-2 md:col-span-2 lg:col-span-1">
+                        <div class="flex gap-2"><span class="font-medium">Payable Amount:</span><span>Rs. {{order_item.item_amount}}</span></div>
+                        <div class="flex gap-2"><span class="font-medium">Quantity:</span><span>{{order_item.quantity}}</span></div>
+                        <div class="flex gap-2"><span class="font-medium">Total Price:</span><span>Rs. {{order_item.get_order_item_total}}</span></div>
+                    </div>
+                    <!-- End of Quantity and Pricing Details -->
+                </div>
+                <!-- End of Cart Product -->
+                {% endfor %}
+            </section>
+            <!-- End of Cart Products Section -->
+        </section>
+        <!-- End of Addresses and Cart Products Section -->
+
+
+        <!-- Section -->
+        <section class="md:col-start-2 md:row-start-2 md:row-span-2 grid gap-1 md:gap-2">
+            <div>
+                <!-- Invoice -->
+                <div class="p-2 bg-blue-200 rounded-lg grid gap-4">
+                    <!-- Invoice Header -->
+                    <header class="text-xl font-bold pt-3 pb-5 px-2 border-b-2 border-gray-600 flex justify-between">Invoice</header>
+                    <!-- End of Invoice Header -->
+
+                    <!-- Particulars -->
+                    <div class="grid gap-2 font-medium px-2">
+                        <div class="flex justify-between">
+                            <div>Order Total</div>
+                            <div>Rs. {{order.total_amount}}</div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Shipping Charges</div>
+                            <div>+ Rs. ________ </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Discount</div>
+                            <div class="text-green-700">- Rs. {{order.discount_amount}} </div>
+                        </div>
+                    </div>
+                    <!-- End of Particulars -->
+
+                    <!-- Billing Amount -->
+                    <footer class="text-lg font-semibold pb-3 pt-5 px-2 border-t-2 border-gray-600 flex justify-between">
+                        <div>Grand Total</div>
+                        <div>Rs. {{order.amount_payable}} </div>
+                    </footer>
+                    <!-- End of Billing Amount -->
+
+
+                    <!-- Checkout Button -->
+                    <button type="submit" class="hidden sm:block text-center bg-yellow-400 rounded-full px-3 py-2">Proceed to Payment</button>
+                    <!-- End of Checkout Button -->
+                </div>
+                <!-- End of Invoice -->
+            </div>
+        </section>
+        <!-- End of Section -->
+    </section>
+    <!-- End of Main Section -->
+
+
+    <!-- Proceed to Payment Button -->
+    <section class="md:hidden fixed bottom-0 w-full bg-slate-50 py-4">
+        <section class="px-2 rounded-xl bg-slate-50 flex items-center justify-between">
+            <div>
+                <div class="font-semibold">Grand Total :</div>
+                <div class="">Rs. {{order.amount_payable}}</div>
+            </div>
+            <button type="submit" class="text-center bg-yellow-400 rounded-full px-4 py-2">Proceed to Payment</a>
+        </section>
+    </section>
+    <!-- End of Proceed to Payment Button -->
+</form>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+
+<!-- Page Script -->
+{% block script %}
+
+function change_address_button_action() {
+    let change_address_button = document.querySelector('#change-address-button');
+    change_address_button.classList.add('hidden');
+    
+    try {
+        let selected_address = document.querySelector('#selected-address');
+        selected_address.classList.remove('hidden');
+    }
+
+    catch(error) {
+        console.log('Not Found')
+    }
+    
+    try {
+        let other_addresses = document.querySelectorAll('.other-address');
+        for (other_address of other_addresses) {
+            other_address.classList.remove('hidden');
+        }
+    }
+    
+    catch(error) {
+        console.log('Not Found')
+    }
+}
+
+{% endblock %}
+<!-- End of Page Script -->

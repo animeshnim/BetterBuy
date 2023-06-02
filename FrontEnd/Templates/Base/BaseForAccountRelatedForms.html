@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta Tag -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+    <!-- Static Files -->
+    {% load static %}
+
+
+    <!-- CSS -->
+    <!-- Line Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
+    
+    <!-- Tailwind Input CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+
+    <!-- Page Specific CSS -->
+    {% block CSS %}  {% endblock %}
+    <!-- End of Page Specific CSS -->
+
+
+
+    <!-- Page Title -->
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+</head>
+
+<body class="min-h-screen bg-slate-100">
+    <main class="flex justify-center min-h-[90vh] items-center bg-neutral-100 p-4">
+        <section class="px-8 py-10 mx-4 flex flex-col gap-12 min-w-full sm:min-w-[32rem] bg-white rounded-xl">
+            <div class="flex flex-col gap-4">
+                <div class="logo"><img src="{% static '/Images/BetterBuyLogo_2.png' %}" alt="BetterBuyLogo" class="w-[10rem]"></div>
+                <div class="page-details text-lg font-semibold">{% block heading %}{% endblock %}</div>
+            </div>
+    
+            <!-- Message Section -->
+            {% if messages %}
+            <section class="bg-transparent px-2 py-2">
+                {% include "Base/Components/alert-messages.html" %}
+            </section>
+            {% endif %}
+            <!-- End of Message Section -->
+    
+            <div id="form-section">
+                {% block form-body %} {% endblock %}
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

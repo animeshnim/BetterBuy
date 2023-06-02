@@ -1,0 +1,331 @@
+{% extends "Base/Base.html" %}
+
+{% load catalogue_tags %}
+
+
+<!-- Page Title -->
+{% block title %} Product | {{product.product_name}} | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+<!-- Navigation Section -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-with-search-button.html" with page_title_left=product.product_name cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<section class="">
+    <!-- Message Section -->
+    {% if messages %}
+    <section class="bg-transparent px-2 py-2">
+        {% include "Base/Components/alert-messages.html" %}
+    </section>
+    {% endif %}
+    <!-- End of Message Section -->
+
+
+    <!-- Main Section -->
+    <main class="product-page bg-slate-50 pt-2 px-2 md:pt-4 md:px-4 lg:pt-8 lg:px-12">
+        <!-- Product Images and Details -->
+        <section class="grid gap-2 md:grid-cols-[4.5fr_5.5fr] md:gap-4 lg:gap-6">
+            <!-- Left Section -->
+            <section class="flex flex-col items-center p-2">
+                <!-- Product Image (Selected) -->
+                <div class="flex justify-center items-center aspect-square max-w-[30rem] max-h-[30rem] p-2 bg-white">
+                    <img src="/media/{{product.product_thumbnail.image}}" alt="Product Image - Selected" id="product-image-selected" class="bg-pink-300">
+                </div>
+                <!-- End of Product Image (Selected) -->
+
+                <!-- Product Images Thumbnail -->
+                <div class="py-4 overflow-x-hidden">
+                    <div class="flex gap-4 justify-center h-[4rem]">
+                        {% for product_image in product_images %}
+                        <div class="flex justify-center bg-white aspect-square">
+                            <img src="/media/{{product_image.image}}" alt="Product Image" class="product-imager" onclick="selectImage(this)">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- End of Product Images Thumbnail -->
+            </section>
+            <!-- End of Left Section -->
+
+
+            <!-- Right Section -->
+            <section class="p-2 grid gap-8">
+                <!-- Brief Details -->
+                <section class="grid gap-4">
+                    <!-- General Info -->
+                    <section>
+                        <div class="text-xl font-bold mb-2">{{product.product_name}}</div>
+                        <div class="text-sm mb-2 flex items-center gap-2">
+                            <div class="px-3 bg-green-400 rounded-full">4.2</div>
+                            <div class="text-gray-600">(4400 Ratings and 1988 Reviews)</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="text-lg font-medium">Rs. {{product.selling_price}}</div>
+                            <div class="text-xs line-through text-gray-600">Rs. {{product.max_retail_price}}</div>
+                        </div>
+                    </section>
+                    <!-- End of General Info -->
+
+                    <!-- Variant Info -->
+                    <section class="grid gap-3">
+                        <div class="colour-variant">
+                            <div class="text-lg font-medium mb-2">Colour Variant</div>
+                            <div class="flex flex-wrap items-center gap-4">
+                                {% if colour_variants|length > 1 %}
+                                {% for product_variant in other_products %}
+                                {% for colour_variant in colour_variants %}
+                                {% if product_variant.colour.colour == colour_variant.colour and product_variant.variant.variant == product.variant.variant %}
+                                {% if product.slug == product_variant.slug %}
+                                <a class="px-3 py-1 border-2 border-yellow-300 bg-yellow-300 hover:bg-yellow-300 rounded-full min-w-fit">{{product.colour}}</a>
+                                {% else %}
+                                <a href="{% url 'ProductPage' product_variant.slug %}" class="px-3 py-1 border-2 border-yellow-300 hover:bg-yellow-300 rounded-full min-w-fit">{{colour_variant.colour}}</a>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="specs-variant">
+                            <div class="text-lg font-medium mb-2">Specs Variant</div>
+                            <div class="flex flex-wrap items-center gap-4">
+                                {% if specs_variants|length > 1 %}
+                                {% for product_variant in other_products %}
+                                {% for specs_variant in specs_variants %}
+                                {% if product_variant.variant.variant == specs_variant.variant and product_variant.colour.colour == product.colour.colour %}
+                                {% if product.slug == product_variant.slug %}
+                                <a class="px-3 py-1 border-2 border-yellow-300 bg-yellow-300 hover:bg-yellow-300 rounded-full min-w-fit">{{product.variant}}</a>
+                                {% else %}
+                                <a href="{% url 'ProductPage' product_variant.slug %}" class="px-3 py-1 border-2 border-yellow-300 hover:bg-yellow-300 rounded-full min-w-fit">{{specs_variant.variant}}</a>
+                                {% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </section>
+                    <!-- End of Variant Info -->
+
+                    <!-- Short Description -->
+                    <section>
+                        <div class="text-lg font-medium">Description</div>
+                        <div>
+                            <p class="text-justify">{{product.product_structure.product_description}}</p>
+                        </div>
+                    </section>
+                    <!-- End of Short Description -->
+                </section>
+                <!-- End of Brief Details -->
+
+
+{% comment %} 
+                <!-- Detailed Details -->
+                <section class="grid gap-2 md:gap-4">
+                    <!-- Offers -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="text-lg sm:text-xl font-semibold bg-yellow-200 rounded-t-lg px-4 py-2">Offers</header>
+                        <section class="p-2 grid gap-2">
+                            <a href="" class="px-2 py-4 rounded-lg flex justify-between gap-3">
+                                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta.</div>
+                                <div class="min-w-fit">- Rs. 1500</div>
+                            </a>
+                            <a href="" class="px-2 py-4 rounded-lg flex justify-between gap-3">
+                                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta.</div>
+                                <div class="min-w-fit">- Rs. 1500</div>
+                            </a>
+                        </section>
+                        <a href=""><footer class="font-semibold bg-yellow-100 rounded-b-lg p-2">All Offers</footer></a> 
+                    </section>
+                    <!-- End of Offers --> 
+{% endcomment %}
+
+{% comment %} 
+                    <!-- Delivery -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="bg-yellow-200 rounded-t-lg p-2 flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold">Deliver to:</div>
+                                {% for address in addresses %}
+                                {% if address.default == 'True' %}
+                                <div>{{address.address}}</div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div>
+                                <button class="px-3 py-1 rounded-full bg-blue-700 text-white">Change</button>
+                            </div>
+                        </header>
+                        <section class="rounded-b-lg p-2">
+                            The Delivery Details are as follows.
+                        </section>
+                    </section>
+                    <!-- End of Delivery --> 
+{% endcomment %}
+
+
+                    <!-- Full Specifications -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="text-lg font-semibold bg-yellow-200 rounded-t-lg px-4 py-2">Product Specifications</header>
+                        <section class="rounded-b-lg p-2">
+                            <div class="mb-6">{{product.product_structure.common_specifications|safe}}</div>
+                            <div>{{product.variant.variant_specifications|safe}}</div>
+                        </section>
+                        <a><footer class="font-semibold bg-yellow-100 rounded-b-lg p-2">Full Specifications</footer></a> 
+                    </section>
+                    <!-- End of Full Specifications -->
+
+{% comment %} 
+                    <!-- Seller Details and T&C's -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="text-lg sm:text-xl px-4 py-2 bg-yellow-200 rounded-t-lg flex gap-2">
+                            <div class="font-semibold">Sold By:</div>
+                            <div>{{product.seller}}</div>
+                        </header>
+                        <section class="p-2 rounded-b-lg grid grid-cols-3 gap-2">
+                            <div class="text-center p-1 bg-yellow-100 rounded-lg">Return or Replacement</div>
+                            <div class="text-center p-1 bg-yellow-100 rounded-lg">Shipping: Free or Paid</div>
+                            <div class="text-center p-1 bg-yellow-100 rounded-lg">Cash on Delivery: Available or Not</div>
+                        </section>
+                    </section>
+                    <!-- End of Seller Details and T&C's --> 
+{% endcomment %}
+
+
+{% comment %} 
+                    <!-- Reviews -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="text-lg sm:text-xl font-semibold bg-yellow-200 rounded-t-lg px-4 py-2">Reviews</header>
+                        <section>
+                            <div class="px-2 py-4 border-b border-gray-500">
+                                <div class="flex gap-2 mb-2">
+                                    <div class="px-3 bg-green-400 rounded-full">4.2</div>
+                                    <div class="font-semibold">Value for Money</div>
+                                </div>
+                                <div class="mb-1">
+                                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolorum adipisci
+                                        corporis vero, maxime excepturi earum optio esse pariatur vitae, dicta eligendi
+                                        voluptas modi ipsam quo nesciunt magnam quia minus consequatur aspernatur.
+                                        Suscipit unde itaque optio vero, inventore rem veritatis eius porro eos
+                                        necessitatibus ea hic laudantium quia nisi cumque quibusdam!</p>
+                                </div>
+                                <div class="text-xs text-gray-600 font-semibold flex gap-2">
+                                    <div>Certified Buyer</div>
+                                    <div>Indore</div>
+                                    <div>May, 2021</div>
+                                </div>
+                            </div>
+                        </section>
+                        <a href=""><footer class="font-semibold bg-yellow-100 rounded-b-lg p-2">All Reviews</footer></a>
+                    </section>
+                    <!-- End of Reviews --> 
+{% endcomment %}
+
+
+{% comment %} 
+                    <!-- Frequently Asked Questions -->
+                    <section class="bg-yellow-50 rounded-lg">
+                        <header class="text-lg sm:text-xl font-semibold bg-yellow-200 rounded-t-lg px-4 py-2">Frequently Asked Questions</header>
+                        <section>
+                            <div class="p-2 border-b border-gray-500">
+                                <div class="flex gap-1">
+                                    <div class="font-semibold">Q:</div>
+                                    <div>Your question is?</div>
+                                </div>
+                                <div class="flex gap-1">
+                                    <div class="font-semibold">A:</div>
+                                    <div>The answer to your question is as follows.</div>
+                                </div>
+                            </div>
+                        </section>
+                        <a href=""><footer class="font-semibold bg-yellow-100 rounded-b-lg p-2">All Questions</footer></a>
+                    </section>
+                    <!-- End of Frequently Asked Questions -->
+{% endcomment %}
+                </section>
+                <!-- End of Detailed Details -->
+            </section>
+            <!-- End of Right Section -->
+        </section>
+        <!-- End of Product Images and Details -->
+
+
+
+        <!-- Quick Actions -->
+        <section class="invisible">
+            <section class="px-2 py-4 rounded-xl bg-slate-50 flex items-center justify-between max-w-[60rem] w-[100vw] mx-auto">
+                <div class="whitespace-nowrap overflow-hidden text-ellipsis mr-3">
+                    <div class="font-semibold">{{product.product_name}}</div>
+                    <div class="">Rs. {{product.selling_price}}</div>
+                </div>
+                <div class="flex gap-2">
+                    {% is_in_cart request.user product as already_there %}
+                    {% if already_there == True %}
+                    <a href="{% url 'CartPage' %}" class="text-center bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2 w-[7rem]">Go to Cart</a>
+                    {% elif already_there == False %}
+                    <a href="{% url 'add-to-cart' product.slug 1 %}" class="text-center bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2 w-[7rem]">Add to Cart</a>
+                    {% else %}
+                    {% endif %}
+                    <button onclick="open_modal_button_action('add-to-wishlist-modal'); set_value_of_product_slug(this.value)" value="{{product.slug}}" class="bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2"><i class="las la-bookmark"></i></button>
+                </div>
+            </section>
+        </section>
+
+
+        <section class="fixed bottom-0 bg-slate-50 w-[100vw]">
+            <section class="px-2 py-4 rounded-xl bg-slate-50 flex items-center justify-between max-w-[60rem] w-[100vw] mx-auto">
+                <div class="whitespace-nowrap overflow-hidden text-ellipsis mr-3">
+                    <div class="font-semibold">{{product.product_name}}</div>
+                    <div class="">Rs. {{product.selling_price}}</div>
+                </div>
+                <div class="flex gap-2">
+                    {% is_in_cart request.user product as already_there %}
+                    {% if already_there == True %}
+                    <a href="{% url 'CartPage' %}" class="text-center bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2 w-[7rem]">Go to Cart</a>
+                    {% elif already_there == False %}
+                    <a href="{% url 'add-to-cart' product.slug 1 %}" class="text-center bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2 w-[7rem]">Add to Cart</a>
+                    {% else %}
+                    {% endif %}
+                    <button onclick="open_modal_button_action('add-to-wishlist-modal'); set_value_of_product_slug(this.value)" value="{{product.slug}}" class="bg-yellow-300 hover:bg-yellow-400 rounded-full px-3 py-2"><i class="las la-bookmark"></i></button>
+                </div>
+            </section>
+        </section>
+        <!-- End of Quick Actions -->
+
+
+
+        <!-- Extra (Promotions, Recommendations, etc.) -->
+        <section></section>
+        <!-- End of Extra (Promotions, Recommendations, etc.) -->
+
+
+
+        <!-- Add to Wishlist Modal -->
+        <section class="hidden" id="add-to-wishlist-modal">
+            {% include "Base/Components/add-to-wishlist-modal.html" %}
+        </section>
+        <!-- End of Add to Wishlist Modal -->
+    </main>
+    <!-- End of Main Section -->
+</section>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+
+{% block script %}
+function selectImage(image) {
+    var selected_image = document.querySelector('#product-image-selected')
+    selected_image.src = image.getAttribute('src')
+}
+{% endblock %}

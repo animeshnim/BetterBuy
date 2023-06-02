@@ -1,0 +1,24 @@
+# General
+*.log
+*.pot
+
+
+# Environments
+ProjectEnv/
+node_modules/
+package-lock.json
+
+
+# Django
+*.pyc
+__pycache__/
+local_settings.py
+
+
+# DataBase
+db.sqlite3
+db.sqlite3-journal
+
+
+# Confidential Info
+.env

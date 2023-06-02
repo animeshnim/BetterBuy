@@ -1,0 +1,152 @@
+{% extends "Base/Base.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} Order Summary | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+{% block body %}
+
+<form action="{% url 'PaymentPage' %}" method="post">{% csrf_token %}
+    <input type="hidden" name="order-type" value="New">
+    <section class="cart-page p-2 md:p-4 lg:px-6 lg:py-4 grid gap-2 md:gap-4 md:grid-cols-[1fr_20rem] lg:grid-cols-[2fr_24rem]">
+        <!-- Status Bar -->
+        <section class="p-2 rounded-lg text-2xl font-bold md:col-span-2">Order Summary</section>
+        <!-- End of Status Bar -->
+
+        <!-- Address and Order Items Section -->
+        <section class="grid gap-4">
+            <!-- Address Section -->
+            <section class="grid p-4">
+                <header class="text-lg font-bold mb-4">Shipping Address</header>
+                <div>
+                    <input type="hidden" name="shipping-address-slug" value={{address.slug}}>
+                    <label for="shipping-address">
+                        <span class="font-semibold">{{address.name}}</span><br>
+                        <span class="">{{address.address}}</span>
+                    </label>
+                </div>
+            </section>
+            <!-- Address Section -->
+
+
+            <!-- Order Items Section -->
+            <section class="grid gap-2 p-4">
+                <!-- Title Bar -->
+                <header class="text-lg font-bold mb-2">Items in this Order</header>
+                <!-- End of Title Bar -->
+
+
+                {% for cart_item in cart_items %}
+                <!-- Cart Product -->
+                <div class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[6rem_1fr] lg:grid-cols-[6rem_2fr_1fr]">
+                    <!-- Product Image -->
+                    <img src="/media/{{cart_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[6rem]">
+                    <!-- End of Product Image -->
+
+                    <!-- Product Details -->
+                    <div class="grid gap-1">
+                        <div class="font-semibold">{{cart_item.product.product_name}}</div>
+                        <div class="text-sm font-medium text-gray-600 mb-6">
+                            <div>{{cart_item.product.colour}}, {{cart_item.product.variant}}</div>
+                        </div>
+                        <div class="text-sm flex gap-2">
+                            <div class="font-medium">Sold By: </div>
+                            <div>{{cart_item.product.product_structure.seller}}</div>
+                        </div>
+                    </div>
+                    <!-- End of Product Details -->
+
+                    <!-- Quantity and Pricing Details -->
+                    <div class="col-span-2 md:col-span-2 lg:col-span-1">
+                        <div class="flex gap-2"><span class="font-medium">Selling Price:</span><span>Rs. {{cart_item.product.selling_price}}</span></div>
+                        <div class="flex gap-2"><span class="font-medium">Quantity:</span><span>{{cart_item.quantity}}</span></div>
+                        <div class="flex gap-2"><span class="font-medium">Total Price:</span><span>Rs. {{cart_item.get_cart_item_total}}</span></div>
+                    </div>
+                    <!-- End of Quantity and Pricing Details -->
+                </div>
+                <!-- End of Cart Product -->
+                {% endfor %}
+            </section>
+            <!-- End of Cart Products Section -->
+        </section>
+        <!-- End of Addresses and Cart Products Section -->
+
+
+        <!-- Section -->
+        <section class="md:col-start-2 md:row-start-2 md:row-span-2 grid gap-1 md:gap-2">
+            <div>
+                <!-- Invoice -->
+                <div class="p-2 bg-blue-200 rounded-lg grid gap-4">
+                    <!-- Invoice Header -->
+                    <header class="text-xl font-bold pt-3 pb-5 px-2 border-b-2 border-gray-600 flex justify-between">Invoice</header>
+                    <!-- End of Invoice Header -->
+
+                    <!-- Particulars -->
+                    <div class="grid gap-2 font-medium px-2">
+                        <div class="flex justify-between">
+                            <div>Cart Total</div>
+                            <div>Rs. {{request.user.get_cart_total}}</div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Discount on MRP</div>
+                            <div class="text-green-700">- Rs. ________ </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Shipping Charges</div>
+                            <div>+ Rs. ________ </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Additional Discounts</div>
+                            <div class="text-green-700">- Rs. ________ </div>
+                        </div>
+                    </div>
+                    <!-- End of Particulars -->
+
+                    <!-- Billing Amount -->
+                    <footer class="text-lg font-semibold pb-3 pt-5 px-2 border-t-2 border-gray-600 flex justify-between">
+                        <div>Grand Total</div>
+                        <div>Rs. ____________ </div>
+                    </footer>
+                    <!-- End of Billing Amount -->
+
+
+                    <!-- Checkout Button -->
+                    <button type="submit" class="hidden sm:block text-center bg-yellow-400 rounded-full px-3 py-2">Proceed to Payment</button>
+                    <!-- End of Checkout Button -->
+                </div>
+                <!-- End of Invoice -->
+            </div>
+        </section>
+        <!-- End of Section -->
+    </section>
+    <!-- End of Main Section -->
+
+
+    <!-- Proceed to Payment Button -->
+    <section class="md:hidden fixed bottom-0 w-full bg-slate-50 py-4">
+        <section class="px-2 rounded-xl bg-slate-50 flex items-center justify-between">
+            <div>
+                <div class="font-semibold">Grand Total :</div>
+                <div class="">Rs. {{request.user.get_cart_total}}</div>
+            </div>
+            <button type="submit" class="text-center bg-yellow-400 rounded-full px-4 py-2">Proceed to Payment</a>
+        </section>
+    </section>
+    <!-- End of Proceed to Payment Button -->
+</form>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+
+<!-- Page Script -->
+{% block script %}
+
+{% endblock %}
+<!-- End of Page Script -->

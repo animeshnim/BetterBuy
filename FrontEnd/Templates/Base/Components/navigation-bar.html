@@ -1,0 +1,112 @@
+{% load static %}
+<!-- Navigation Bar -->
+<nav class="navbar sticky top-0 bg-blue-600 p-2 md:px-4 md:py-3 flex flex-col gap-2 sm:gap-0">
+    <section class="flex justify-between" id="primary-navbar">
+        <div class="flex gap-2 items-center md:gap-4">
+            <div class="text-white sm:hidden">
+                <i id="menu-button" onclick="menu_button_action()" class="las la-bars text-4xl"></i>
+                <i id="cancel-button" onclick="cancel_button_action()" class="las la-times text-4xl hidden"></i>
+            </div>
+            <div class="logo text-lg min-w-max"><img src="{% static '/Images/BetterBuyLogo_1.png' %}" alt="BetterBuyLogo" class="w-[9rem]"></div>
+            <form action="{% url 'SearchedCatalogue' %}" class="search-bar hidden sm:flex gap-1 border-2 border-black rounded-full bg-white p-1">
+                <input type="search" name="query" placeholder="Search Products" class="search-data min-w-[40ch] outline-none ml-2" required>
+                <button type="submit" class="search-button bg-yellow-400 hover:bg-yellow-300 rounded-full px-2 py-1">
+                    <i class="las la-search text-xl"></i>
+                </button>
+            </form>
+        </div>
+        <div class="right-portion flex items-center gap-1 md:gap-6">
+            <div class="profile">
+                {% if user.is_authenticated %}
+                <a href="{% url 'AccountPage' %}" class="">
+                    <div class="profile-button hidden font-medium px-4 py-2 rounded-full bg-yellow-400 hover:bg-yellow-300 md:block">Welcome, {{request.user.individualuseraccount.first_name}}</div>
+                    <div class="hidden sm:block md:hidden"><i class="las la-user text-4xl text-white hover:text-yellow-300"></i></div>
+                </a>
+                {% else %}
+                <a href="{% url 'LoginPage' %}" class="">
+                    <div class="hidden font-medium px-4 py-2 rounded-full bg-yellow-400 hover:bg-yellow-300 md:block">Your Profile</div>
+                    <div class="flex items-center md:hidden"><span class="text-xs font-medium text-white">Sign In</span><i class="las la-user text-4xl text-white hover:text-yellow-300 md:hidden"></i></div>
+                </a>
+                {% endif %}
+            </div>
+            {% comment %} <div class="other-actions">
+                <a><div class="hidden text-white hover:text-yellow-300 md:block">More Actions (N/I/Y)</div></a>
+            </div> {% endcomment %}
+            <div class="cart">
+                <a href="{% url 'CartPage' %}" class="{{cart_state}}">
+                    <div class="text-white hover:text-yellow-300 md:block">
+                        {% if user.is_authenticated %}
+                        <div class="hidden md:block min-w-fit">Cart ({{request.user.get_total_cart_items}})</div>
+                        <div class="md:hidden"><i class="las la-shopping-cart text-4xl text-white hover:text-yellow-300"></i><span>({{request.user.get_total_cart_items}})</span></div>
+                        {% else %}
+                        <div class="hidden md:block">Cart</div>
+                        <div class="md:hidden"><i class="las la-shopping-cart text-4xl text-white hover:text-yellow-300"></i></div>
+                        {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'Wishlists' %}" class="{{wishlist_state}}">
+                    <div class="text-white hover:text-yellow-300 lg:block">
+                        <div class="hidden lg:block">Wishlists</div>
+                        <div class="lg:hidden"><i class="las la-bookmark text-4xl text-white hover:text-yellow-300 lg:hidden"></i></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="secondary-navbar">
+        <form action="{% url 'SearchedCatalogue' %}" class="search-bar flex gap-1 border-2 border-black rounded-full bg-white p-1 sm:hidden">
+            <input type="search" name="query" placeholder="Search Products" class="search-data w-full outline-none ml-2" required>
+            <button type="submit" class="search-button bg-yellow-400 hover:bg-yellow-300 rounded-full px-2 py-1">
+                <i class="las la-search text-xl"></i>
+            </button>
+        </form>
+    </section>
+</nav>
+<!-- End of Navigation Bar -->
+
+
+
+<!-- Menu Section -->
+<section id="menu-section" class="hidden sm:hidden  p-2">
+    {% include "Base/Components/hamburger-menu.html" %}
+</section>
+<!-- End of Menu Section -->
+
+
+
+<script>
+    function menu_button_action() {
+        menu_section = document.querySelector('#menu-section');
+        menu_button = document.querySelector('#menu-button');
+        cancel_button = document.querySelector('#cancel-button');
+        secondary_navbar = document.querySelector('#secondary-navbar');
+        main_content = document.querySelector('#main-content');
+        footer = document.querySelector('#footer');
+    
+        menu_section.classList.remove('hidden');
+        menu_button.classList.add('hidden');
+        cancel_button.classList.remove('hidden');
+        secondary_navbar.classList.add('hidden');
+        main_content.classList.add('hidden');
+        footer.classList.add('hidden');
+    }
+    
+    
+    function cancel_button_action() {
+        menu_section = document.querySelector('#menu-section');
+        menu_button = document.querySelector('#menu-button');
+        cancel_button = document.querySelector('#cancel-button');
+        secondary_navbar = document.querySelector('#secondary-navbar');
+        main_content = document.querySelector('#main-content');
+        footer = document.querySelector('#footer');
+    
+        menu_section.classList.add('hidden');
+        menu_button.classList.remove('hidden');
+        cancel_button.classList.add('hidden');
+        secondary_navbar.classList.remove('hidden');
+        main_content.classList.remove('hidden');
+        footer.classList.remove('hidden');
+    }
+</script>

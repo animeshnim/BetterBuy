@@ -1,0 +1,1 @@
+# View Helper Functions for Catalogue

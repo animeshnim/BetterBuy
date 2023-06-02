@@ -1,0 +1,149 @@
+{% extends "Base/BaseWithAccountsSection.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} Wishlist | {{wishlist.name}} | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+<!-- Navigation Section -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-without-mobile-search.html" with page_title='My Wishlist' cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<section>
+    <!-- Header -->
+    <form action="{% url 'edit-wishlist' %}" class="flex justify-between items-center mb-4">
+        <div class="flex justify-between gap-2">
+            <input type="hidden" name="wishlist-id" value="{{wishlist.unique_id}}">
+            <input type="text" name="wishlist-new-name" id="wishlist-name-input" placeholder="{{wishlist.name}}" class="hidden bg-transparent outline-none text-xl font-bold px-2 my-2 w-[20ch]" required>
+            <header class="text-xl font-bold p-2" id="wishlist-name" class="">{{wishlist.name}}</header>    
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" id="ok-button" class="hidden justify-center items-center gap-1 px-3 py-1 rounded-full bg-blue-700 text-white"><i class="las la-check"></i><span class="hidden lg:block">Ok</span></button>
+            <button type="button" id="cancel-edit-button" onclick="cancel_edit_button_action()" class="hidden justify-center items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white"><i class="las la-times text-xl"></i><span class="hidden lg:block">Cancel</span></button>
+        </div>
+        <div class="flex gap-2">
+            <button type="button" id="edit-wishlist-button" onclick="edit_wishlist_button_action()" class="flex justify-center items-center gap-1 px-3 py-1 rounded-full bg-blue-700 text-white"><i class="las la-edit text-xl"></i><span class="hidden lg:block">Edit Wishlist</span></button>
+            <a href="{% url 'delete-wishlist' %}?wishlist-id={{wishlist.unique_id}}" id="delete-button" class="flex justify-center items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white"><i class="las la-trash text-xl"></i><span class="hidden lg:block">Delete</span></a>
+        </div>
+    </form>
+    <!-- End of Header -->
+    
+
+    <!-- Wishlist Items Section -->
+    <section class="wishlist-items-section grid gap-2 lg:grid-cols-2">
+        {% if wishlist_items|length == 0 %}
+        <div class="px-4 text-lg">This Wishlist is Empty</div>
+        {% else %}
+        {% for wishlist_item in wishlist_items %}
+        <!-- Wishlist Item -->
+        <section class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[0.1fr_1fr_24px]">
+            <a href="{% url 'ProductPage' wishlist_item.product.slug %}">
+                <!-- Wishlist Item Image and Tag -->
+                <div class="flex flex-col gap-2 justify-center">
+                    <img src="/media/{{wishlist_item.product.product_thumbnail.image}}" alt="P-Image" class="w-[6rem] h-full">
+                </div>
+                <!-- End of Wishlist Item Image and Tag -->
+            </a>
+
+            <!-- Wishlist Item Details -->
+            <div class="grid gap-1">
+                <!-- Wishlist Item Name -->
+                <a href="{% url 'ProductPage' wishlist_item.product.slug %}">
+                    <div class="font-semibold">{{wishlist_item.product.product_name}}</div>
+                    <div class="text-sm font-medium text-gray-600">
+                        <div>{{wishlist_item.product.colour}}, {{wishlist_item.product.variant}}</div>
+                    </div>
+                </a>
+                <!-- End of Wishlist Item Name -->
+
+                <!-- Wishlist Item Price -->
+                <a href="{% url 'ProductPage' wishlist_item.product.slug %}">
+                    <div class="text-sm flex gap-2">
+                        <div>Rs. {{wishlist_item.product.selling_price}}</div>
+                        <div class="line-through">Rs. {{wishlist_item.product.max_retail_price}}</div>
+                    </div>
+                </a>
+                <!-- End of Wishlist Item Price -->
+            </div>
+            <!-- End of Wishlist Item Details -->
+
+            <!-- Utility Buttons -->
+            <div>
+                <a href="{% url 'add-to-cart' wishlist_item.product.slug 1 %}"><i class="las la-cart-plus text-2xl"></i></a>
+                <a href="{% url 'remove-from-wishlist' %}?wishlist-item-id={{wishlist_item.unique_id}}"><i class="las la-trash text-2xl"></i></a>
+            </div>
+            <!-- End of Utility Buttons -->
+        </section>
+        <!-- End of Wishlist Item -->
+        {% endfor %}
+        {% endif %}
+    </section>
+    <!-- End of Wishlist Items -->
+</section>
+
+{% endblock %}
+
+
+{% block script %}
+
+function edit_wishlist_button_action(){
+    let ok_button = document.querySelector('#ok-button');
+    let cancel_button = document.querySelector('#cancel-edit-button');
+
+    let edit_wishlist_button = document.querySelector('#edit-wishlist-button');
+    let delete_button = document.querySelector('#delete-button');
+
+    let wishlist_name_input = document.querySelector('#wishlist-name-input');
+    let wishlist_name = document.querySelector('#wishlist-name');
+
+    ok_button.classList.add('flex');
+    ok_button.classList.remove('hidden');
+    cancel_button.classList.add('flex');
+    cancel_button.classList.remove('hidden');
+
+    edit_wishlist_button.classList.add('hidden');
+    edit_wishlist_button.classList.remove('flex');
+    delete_button.classList.add('hidden');
+    delete_button.classList.remove('flex');
+
+    wishlist_name.classList.add('hidden');
+    wishlist_name_input.classList.add('block');
+    wishlist_name_input.classList.remove('hidden');
+}
+
+
+function cancel_edit_button_action(){
+    let ok_button = document.querySelector('#ok-button');
+    let cancel_button = document.querySelector('#cancel-edit-button');
+
+    let edit_wishlist_button = document.querySelector('#edit-wishlist-button');
+    let delete_button = document.querySelector('#delete-button');
+
+    let wishlist_name_input = document.querySelector('#wishlist-name-input');
+    let wishlist_name = document.querySelector('#wishlist-name');
+
+    ok_button.classList.add('hidden');
+    ok_button.classList.remove('flex');
+    cancel_button.classList.add('hidden');
+    cancel_button.classList.remove('flex');
+
+    edit_wishlist_button.classList.add('flex');
+    edit_wishlist_button.classList.remove('hidden');
+    delete_button.classList.add('flex');
+    delete_button.classList.remove('hidden');
+
+    wishlist_name.classList.remove('hidden');
+    wishlist_name_input.classList.add('hidden');
+    wishlist_name_input.classList.remove('block');
+}
+{% endblock %}

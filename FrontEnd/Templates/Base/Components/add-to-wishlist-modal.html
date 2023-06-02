@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+
+    <style>
+        .overlay-bg {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+        }
+
+        #wishlist-form {
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="wishlist-form" data-state="closed" class="overlay fixed top-0 bottom-0 left-0 right-0 min-w-full min-h-screen z-10 overlay-bg">
+        <section class="flex justify-center items-center w-full">
+            <div class="p-2 bg-white min-h-[100%] w-full max-w-[40rem] rounded-lg sm:m-8 my-auto">
+                <div class="flex justify-between items-center p-2">
+                    <header class="text-lg font-semibold text-center">Add Product to My Wishlist</header>
+                    <button onclick="close_modal_button_action()"><i class="las la-times text-xl"></i></button>
+                </div>
+                <form action="{% url 'add-to-wishlist' %}" method="get" class="grid justify-center content-center gap-4 px-6 pb-6">
+                    <div class="grid gap-2 text-lg">
+                        <!-- Hidden Inputs -->
+                        <div>
+                            <input type="hidden" name="product-slug" id="product-slug" value="">
+                        </div>
+                        <!-- End of Hidden Inputs -->
+                        
+                        {% for wishlist in wishlists %}
+                        <!-- Existing Wishlist -->
+                        <div class="">
+                            <input type="radio" name="wishlist-id" value={{wishlist.unique_id}} class="wishlist-id-input" required>
+                            <span class="font-semibold">{{wishlist.name}}</span>
+                        </div>
+                        <!-- End of Existing Wishlist -->
+                        {% endfor %}
+                
+                        <!-- New Wishlist -->
+                        <div>
+                            <input type="text" name="new-wishlist-name" id="new-wishlist-name-input" placeholder="Wishlist Name" class="hidden outline-none rounded-full px-3 py-1 bg-neutral-100 w-full" required>
+                            <button type="button" onclick="new_wishlist_button_action()" id="new-wishlist-button" class="flex gap-1 items-center text-blue-600"><i class="las la-plus font-semibold"></i><span>New Wishlist</span></button>
+                        </div>
+                        <!-- End of New Wishlist -->
+                    </div>
+            
+                    <!-- Submit Buttons -->
+                    <div class="grid gap-2">
+                        {% if wishlists|length >= 1 %}
+                        <button type="submit" onclick="add_to_selected_wishlist_action()" name="add-to-selected-wishlist" class="font-medium px-4 py-1 rounded-full bg-yellow-400 hover:bg-yellow-300">Add to Selected Wishlist</button>
+                        {% endif %}
+            
+                        <button type="submit" onclick="add_to_new_wishlist_button_action()" name="add-to-new-wishlist" id="add-to-new-wishlist-button" class="font-medium px-4 py-1 rounded-full bg-yellow-400 hover:bg-yellow-300 hidden">Add to New Wishlist</button>
+                    </div>
+                    <!-- End of Submit Buttons -->
+                </form>
+            </div>
+        </section>
+    </section>
+</body>
+
+
+<script>
+    function set_value_of_product_slug(value) {
+        input_tag = document.querySelector('#product-slug');
+        input_tag.value = value;
+    }
+
+    function new_wishlist_button_action() {
+        let new_wishlist_name_input = document.querySelector('#new-wishlist-name-input');
+        let create_new_wishlist_button = document.querySelector('#new-wishlist-button');
+        let add_to_new_wishlist_button = document.querySelector('#add-to-new-wishlist-button');
+
+        new_wishlist_name_input.classList.remove('hidden')
+        add_to_new_wishlist_button.classList.remove('hidden')
+        create_new_wishlist_button.classList.add('hidden');
+    }
+
+    function add_to_new_wishlist_button_action() {
+        let wishlist_id_inputs = document.querySelectorAll('.wishlist-id-input');
+        let new_wishlist_name_input = document.querySelector('#new-wishlist-name-input');
+        
+        new_wishlist_name_input.required = true;
+        for (wishlist_id_input of wishlist_id_inputs) {
+            wishlist_id_input.removeAttribute('required');
+        }
+    }
+
+    function add_to_selected_wishlist_action() {
+        let new_wishlist_name_input = document.querySelector('#new-wishlist-name-input');
+        let wishlist_id_inputs = document.querySelectorAll('.wishlist-id-input');
+        
+        new_wishlist_name_input.removeAttribute('required');
+        for (wishlist_id_input of wishlist_id_inputs) {
+            wishlist_id_input.required = true;
+        }
+    }
+</script>
+
+</html>

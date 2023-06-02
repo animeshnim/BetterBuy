@@ -1,0 +1,186 @@
+{% extends "Base/Base.html" %}
+
+
+
+<!-- Page Title -->
+{% block title %} My Orders | BetterBuy {% endblock %}
+<!-- End of Page Title -->
+
+
+
+<!-- Page Content -->
+<!-- Navigation Section -->
+{% block navigation-bar %}
+    {% include "Base/Components/navigation-bar-without-mobile-search.html" with page_title='My Orders' cart_state='block' wishlist_state='hidden' %}
+{% endblock %}
+<!-- End of Navigation Section -->
+
+
+
+{% block body %}
+
+<section class="min-h-screen bg-slate-100" id="main-content">
+    <!-- Message Section -->
+    {% if messages %}
+    <section class="bg-transparent px-2 py-2">
+        {% include "Base/Components/alert-messages.html" %}
+    </section>
+    {% endif %}
+    <!-- End of Message Section -->
+
+    
+
+    <!-- Main Section -->
+    <section class="p-2 md:p-4 grid gap-2 md:gap-4 sm:grid-cols-[15rem_1fr] md:grid-cols-[18rem_1fr]">
+        
+        <!-- Status Bar -->
+        <section class="p-2 rounded-lg bg-red-200 font-semibold sm:col-span-2 flex justify-between">
+            <div>Status Bar</div>
+        </section>
+        <!-- End of Status Bar -->
+
+        {% if order_items.count == 0 %}
+        <div class="sm:col-span-2 flex flex-col items-center justify-center pt-10 px-6 gap-6">
+            <div class="text-lg font-semibold">No Orders to Display</div>
+            <a href="{% url 'HomePage' %}" class="px-5 py-3 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring">Shop Now</a>
+        </div>
+        {% else %}
+
+
+        <!-- Filter Bar -->
+        <section class="hidden sm:block p-2 rounded-lg bg-blue-200 font-semibold">Filters</section>
+        <!-- End of Filter Bar -->
+
+        <!-- Orders Preview -->
+        <section class="grid gap-2 md:gap-4">
+            <!-- Search Bar -->
+            <div class="flex gap-4 justify-between items-center">
+                <a class="sm:hidden text-lg bg-white px-3 py-2 rounded-full sm:min-w-[6rem]">
+                    <i class="las la-filter"></i>
+                    <span class="hidden sm:block">Filters</span>
+                </a>
+                <form class="bg-white rounded-full flex w-full">
+                    <input type="search" placeholder="Search Orders" class="outline-none pr-1 pl-3 rounded-l-full w-full">
+                    <button class="sm:hidden text-lg px-3 py-2 rounded-full max-w-fit text-white bg-blue-800"><i class="las la-search text-xl"></i></button>
+                    <button class="hidden sm:block text-lg px-3 py-2 rounded-full text-white bg-blue-800"><span class="">Search</span></button>
+                </form>
+            </div>
+            <!-- End of Search Bar -->
+
+
+            <!-- Orders Section -->
+            <section class="grid gap-2">
+                {% for order_item in order_items %}
+                <!-- Order Item -->
+                <section class="p-2 rounded-lg bg-purple-200 grid gap-3 md:grid-cols-[2fr_1.2fr]">
+                    <!-- Extra Order Details -->
+                    <!-- <div class="md:col-span-2">
+                        <div class="inline-block text-sm bg-yellow-100 px-3 py-1 rounded-full">Not Implemented Yet</div>
+                    </div> -->
+                    <!-- End of Extra Order Details -->
+
+                    <!-- Primary Product Details -->
+                    <div class="grid grid-cols-[5rem_1fr] xl:grid-cols-[5rem_1fr_0.3fr] gap-4">
+                        <a href="{% url 'ProductPage' order_item.product.slug %}" class="row-span-2">
+                            <img src="/media/{{order_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[5rem] h-full">
+                        </a>
+                        <div class="md:hidden text-sm font-medium">
+                            {% if order_item.order.is_paid == True %}
+                            <div class="text-sm font-medium">Order Placed</div>
+                            {% elif order_item.order.is_paid == False %}
+                            <div class="text-sm font-medium">Order Pending</div>
+                            {% endif %}
+                        </div>
+                        <div class="mr-4">
+                            <div class="font-bold">{{order_item.product.product_name}}</div>
+                            <div class="text-xs font-medium text-gray-600">{{order_item.product.colour}}, {{order_item.product.variant}}</div>
+                            <div class="text-sm flex gap-1 mt-2 xl:mt-4">
+                                <span class="font-medium">Sold By:</span>
+                                <span>{{order_item.product.product_structure.seller}}</span>
+                            </div>
+                        </div>
+                        <div class="hidden md:block text-sm font-semibold mr-4">Rs. {{order_item.item_amount}}</div>
+                    </div>
+                    <!-- End of Primary Product Details -->
+
+
+                    <!-- Additional Order Details & Product Review -->
+                    <div class="hidden md:flex flex-col justify-between">
+                        <!-- Order Status (Detailed) -->
+                        <div>
+                            {% if order_item.order.is_paid == True %}
+                            <div class="text-sm font-medium">Order Placed</div>
+                            <div class="text-xs">Your item is expected to get delivered within 7 days</div>
+                            {% elif order_item.order.is_paid == False %}
+                            <div class="text-sm font-medium">Order Pending</div>
+                            <div class="text-xs">Your Order is not placed successfully. Please complete your order.</div>
+                            {% endif %}
+                        </div>
+                        <!-- End of Order Status (Detailed) -->
+                        
+
+                        <div class="hidden md:block">
+                            {% if order_item.order.is_paid == True %}
+                            <!-- Review Product Section -->
+                            <div>
+                                <div>
+                                    <a><i class="las la-star"></i></a>
+                                    <a><i class="las la-star"></i></a>
+                                    <a><i class="las la-star"></i></a>
+                                    <a><i class="las la-star"></i></a>
+                                    <a><i class="lar la-star"></i></a>
+                                </div>
+                                <button class="text-sm text-blue-500">Write the Review</button>
+                            </div>
+                            <!-- End of Review Product Section -->
+                            {% elif order_item.order.is_paid == False %}
+                            <form action="{% url 'PendingOrderSummaryPage' %}" method="post" class="flex flex-col gap-4">{% csrf_token %}
+                                <input type="hidden" name="order-id" value="{{order_item.order.unique_id}}">
+                                <button type="submit" class="px-2 py-1 bg-yellow-400 hover:bg-yellow-300 rounded-full">Pay and Confirm</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- End of Additional Order Details & Product Review -->
+
+
+                    <div class="md:hidden">
+                        {% if order_item.order.is_paid == True %}
+                        <!-- Review Product Section -->
+                        <div>
+                            <div>
+                                <a><i class="las la-star"></i></a>
+                                <a><i class="las la-star"></i></a>
+                                <a><i class="las la-star"></i></a>
+                                <a><i class="las la-star"></i></a>
+                                <a><i class="lar la-star"></i></a>
+                            </div>
+                            <button class="text-sm text-blue-500">Write the Review</button>
+                        </div>
+                        <!-- End of Review Product Section -->
+                        {% elif order_item.order.is_paid == False %}
+                        <form action="{% url 'PendingOrderSummaryPage' %}" method="post" class="flex flex-col gap-4">{% csrf_token %}
+                            <input type="hidden" name="order-id" value="{{order_item.order.unique_id}}">
+                            <button type="submit" class="px-2 py-1 bg-yellow-400 hover:bg-yellow-300 rounded-full">Pay and Confirm</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </section>
+                {% endfor %}
+            <!-- End of Orders Section -->
+        </section>
+        <!-- End of Orders Preview -->
+        {% endif %}
+    </section>
+</section>
+
+{% endblock %}
+<!-- End of Page Content -->
+
+
+
+<!-- Page Script -->
+{% block script %}
+
+{% endblock %}
+<!-- End of Page Script -->
