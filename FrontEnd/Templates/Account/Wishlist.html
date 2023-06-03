@@ -46,11 +46,11 @@
         {% else %}
         {% for wishlist_item in wishlist_items %}
         <!-- Wishlist Item -->
-        <section class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[0.1fr_1fr_24px]">
+        <section class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[4rem_1fr_24px]">
             <a href="{% url 'ProductPage' wishlist_item.product.slug %}">
                 <!-- Wishlist Item Image and Tag -->
                 <div class="flex flex-col gap-2 justify-center">
-                    <img src="/media/{{wishlist_item.product.product_thumbnail.image}}" alt="P-Image" class="w-[6rem] h-full">
+                    <img src="{{wishlist_item.product.product_thumbnail.image.url}}" alt="P-Image" class="w-[6rem] h-full">
                 </div>
                 <!-- End of Wishlist Item Image and Tag -->
             </a>

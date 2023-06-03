@@ -38,7 +38,7 @@
             <section class="flex flex-col items-center p-2">
                 <!-- Product Image (Selected) -->
                 <div class="flex justify-center items-center aspect-square max-w-[30rem] max-h-[30rem] p-2 bg-white">
-                    <img src="/media/{{product.product_thumbnail.image}}" alt="Product Image - Selected" id="product-image-selected" class="bg-pink-300">
+                    <img src="{{product.product_thumbnail.image.url}}" alt="Product Image - Selected" id="product-image-selected" class="bg-pink-300">
                 </div>
                 <!-- End of Product Image (Selected) -->
 
@@ -47,7 +47,7 @@
                     <div class="flex gap-4 justify-center h-[4rem]">
                         {% for product_image in product_images %}
                         <div class="flex justify-center bg-white aspect-square">
-                            <img src="/media/{{product_image.image}}" alt="Product Image" class="product-imager" onclick="selectImage(this)">
+                            <img src="{{product_image.image.url}}" alt="Product Image" class="product-imager" onclick="selectImage(this)">
                         </div>
                         {% endfor %}
                     </div>
@@ -281,8 +281,8 @@
         </section>
 
 
-        <section class="fixed bottom-0 bg-slate-50 w-[100vw]">
-            <section class="px-2 py-4 rounded-xl bg-slate-50 flex items-center justify-between max-w-[60rem] w-[100vw] mx-auto">
+        <section class="fixed bottom-0 bg-white w-[100vw]">
+            <section class="px-2 py-4 rounded-xl flex items-center justify-between max-w-[60rem] w-[100vw] mx-auto">
                 <div class="whitespace-nowrap overflow-hidden text-ellipsis mr-3">
                     <div class="font-semibold">{{product.product_name}}</div>
                     <div class="">Rs. {{product.selling_price}}</div>

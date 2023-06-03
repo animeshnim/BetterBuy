@@ -82,7 +82,7 @@
                     <!-- Primary Product Details -->
                     <div class="grid grid-cols-[5rem_1fr] xl:grid-cols-[5rem_1fr_0.3fr] gap-4">
                         <a href="{% url 'ProductPage' order_item.product.slug %}" class="row-span-2">
-                            <img src="/media/{{order_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[5rem] h-full">
+                            <div><img src="{{order_item.product.product_thumbnail.image.url}}" alt="P-Image" class="bg-pink-300 w-[5rem] h-full"></div>
                         </a>
                         <div class="md:hidden text-sm font-medium">
                             {% if order_item.order.is_paid == True %}

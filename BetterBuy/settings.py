@@ -65,6 +65,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Cloudinary Storage
+    'cloudinary_storage',
+    'cloudinary',
     
     # Additional Apps
     'tinymce',
@@ -181,16 +185,20 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'FrontEnd/Static')]
 
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'MediaFiles')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'MediaFiles')
 
 
 STORAGES = {
+    "default": {
+        # Media Files Storage for Cloudinary
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+
     "staticfiles": {
         # Static Files Storage for Whitenoise
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"
     },
 }
-
 
 
 # Default primary key field type
@@ -228,3 +236,12 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
+
+# Coludinary Setup
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+}

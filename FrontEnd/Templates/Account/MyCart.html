@@ -93,7 +93,9 @@
                     <!-- Cart Product -->
                     <div class="p-2 rounded-lg bg-purple-200 grid gap-2 grid-cols-[6rem_1fr] lg:grid-cols-[6rem_2fr_1.7fr_30px]">
                         <!-- Product Image -->
-                        <a href="{% url 'ProductPage' cart_item.product.slug %}"><img src="/media/{{cart_item.product.product_thumbnail.image}}" alt="P-Image" class="bg-pink-300 w-[6rem] min-h-full"></a>
+                        <a href="{% url 'ProductPage' cart_item.product.slug %}">
+                            <div><img src="{{cart_item.product.product_thumbnail.image.url}}" alt="P-Image" class="bg-pink-300 w-[6rem] h-full"></div>
+                        </a>
                         <!-- End of Product Image -->
 
                         <!-- Product Details -->
