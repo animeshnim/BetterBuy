@@ -22,7 +22,6 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-import os
 
 
 
@@ -51,7 +50,7 @@ urlpatterns = [
     path('404', views.Error404, name = 'Error404'),
 
     # 5xx Errors:
-
+    path('500', views.Error500, name = 'Error500'),
 ]
 
 
@@ -62,8 +61,9 @@ handler400 = 'BetterBuy.views.Error400'
 handler403 = 'BetterBuy.views.Error403'
 handler404 = 'BetterBuy.views.Error404'
 
+
 # 5xx Errors:
-# handler500 = 'MyStore.views.Error500'
+handler500 = 'BetterBuy.views.Error500'
 
 
 

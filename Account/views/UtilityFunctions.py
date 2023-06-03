@@ -97,7 +97,15 @@ def add_new_address(request):
                 
                 messages.success(request, 'New address added')
 
-    return redirect(request.META.get('HTTP_REFERER'))
+            return redirect(request.META.get('HTTP_REFERER'))
+        
+
+        else:
+            return redirect('Error403')
+    
+
+    elif request.method == 'GET':
+        return redirect('Error400')
 
 
 
@@ -116,7 +124,7 @@ def delete_address(request, address_id):
     
 
     else:
-        return redirect('LoginPage')
+        return redirect('Error403')
 
 
 
@@ -182,4 +190,12 @@ def edit_address(request):
                 messages.error(request, f'Address already exists')
 
 
-    return redirect(request.META.get('HTTP_REFERER'))
+            return redirect(request.META.get('HTTP_REFERER'))
+
+
+        else:
+            return redirect('Error403')
+    
+    
+    elif request.method == 'GET':
+        return redirect('Error400')

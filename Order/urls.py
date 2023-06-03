@@ -29,9 +29,9 @@ from Order.views import UtilityFunctions
 
 # URL Patterns
 urlpatterns = [
-    path('order-summary/', MyViews.OrderSummary, name='OrderSummary'),
-    path('my-order/pending/order-summary', MyViews.PendingOrderSummaryPage, name='PendingOrderSummaryPage'),
+    path('order-summary', MyViews.OrderSummary, name='OrderSummary'),
+    path('pending/order-summary', MyViews.PendingOrderSummaryPage, name='PendingOrderSummaryPage'),
     path('redirecting/payment-page', MyViews.PaymentPage, name='PaymentPage'),
-    path('my-order/status/pending/', MyViews.OrderPending, name='order-pending'),
-    path('my-order/payment/success/', MyViews.OrderPaymentSuccess, name='OrderPaymentSuccess'),
+    path('my-order/status/pending', MyViews.OrderPending, name='order-pending'),
+    path('my-order/status/success', MyViews.OrderPaymentSuccess, name='OrderPaymentSuccess'),
 ]

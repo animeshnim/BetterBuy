@@ -44,7 +44,7 @@ if PROJECT_ENVIRONMENT == 'DEVELOPMENT':
 
 elif PROJECT_ENVIRONMENT == 'PRODUCTION':
     DEBUG = False
-    ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+    ALLOWED_HOSTS = ['.vercel.app', '.now.sh', '*']
 
     # Secure Cookies
     CSRF_COOKIE_SECURE = True

@@ -46,6 +46,14 @@ def OrderSummary(request):
 
             return render(request, 'Order/OrderSummary.html', data)
 
+        
+        else:
+            return redirect('Error403')
+
+
+    elif request.method == 'GET':
+        return redirect('Error400')
+
 
 
 @cache_control(max_age = 0, no_cache = True, no_store = True, must_revalidate = True)
@@ -72,6 +80,14 @@ def PendingOrderSummaryPage(request):
                 }
 
                 return render(request, 'Order/PendingOrderSummary.html', data)
+        
+
+        else:
+            return redirect('Error403')
+
+
+    elif request.method == 'GET':
+        return redirect('Error400')
 
 
 
@@ -137,6 +153,14 @@ def PaymentPage(request):
             }
             
             return render(request, 'Order/PaymentPage.html', data)
+    
+
+        else:
+            return redirect('Error403')
+
+
+    elif request.method == 'GET':
+        return redirect('Error400')
 
 
 
@@ -167,3 +191,7 @@ def OrderPaymentSuccess(request):
         }
 
         return render(request, 'Order/PaymentSuccess.html', data)
+
+
+    elif request.method == 'GET':
+        return redirect('Error400')

@@ -18,6 +18,7 @@ def LoginPage(request, EndPoint = None, EndURL = None):
         password = request.POST['login-password']
 
         login_data = userAuthentication(request, email.lower(), password)
+        
         if login_data == 1:
             messages.error(request, 'Invalid Credentials!')
             return HttpResponseRedirect(request.path_info)
@@ -42,10 +43,11 @@ def LoginPage(request, EndPoint = None, EndURL = None):
         elif login_data == 3:
             request.session['email'] = email
             return redirect('AccountStatusPage')
-    
 
-    data = {}
-    return render(request, 'Account/Login/LoginPage.html', data)
+
+    elif request.method == 'GET':
+        data = {}
+        return render(request, 'Account/Login/LoginPage.html', data)
 
 
 
@@ -93,8 +95,11 @@ def IndividualSignUpPage(request):
                 return HttpResponseRedirect(request.path_info)
 
 
-    data = {}
-    return render(request, 'Account/SignUp/IndividualSignUp.html', data)
+    elif request.method == 'GET':
+        data = {}
+        return render(request, 'Account/SignUp/IndividualSignUp.html', data)
+
+
 
 
 @cache_control(max_age = 0, no_cache = True, no_store = True, must_revalidate = True)
@@ -110,10 +115,15 @@ def MyUserAccountActivation(request, token):
             messages.success(request, "User Account Verified Successfully")
             return redirect('LoginPage')
 
+        else:
+            return HttpResponse('Invalid Verification Token')
+
 
     except Exception as e:
         print(e)
         return HttpResponse('Invalid Verification Token')
+
+
 
 
 @cache_control(max_age = 0, no_cache = True, no_store = True, must_revalidate = True)
@@ -121,12 +131,14 @@ def ResetPasswordPage(request, token):
     try:
         user = MyUser.objects.get(reset_password_token = token)
         token_verification_status = PasswordResetTokenGenerator().check_token(user, token)
-        print(token_verification_status)
         
         data = {'user':user, 'token':token}
 
         if token_verification_status == True:
             return render(request, 'Account/Login/ResetPasswordPage.html', data)
+
+        else:
+            return HttpResponse('Invalid Verification Token')
 
 
     except Exception as e:
@@ -134,8 +146,12 @@ def ResetPasswordPage(request, token):
         return HttpResponse('Invalid Verification Token')
 
 
+
+
 def ForgotPasswordPage(request):
     return render(request, 'Account/Login/ForgotPasswordPage.html')
+
+
 
 
 @cache_control(max_age = 0, no_cache = True, no_store = True, must_revalidate = True)
@@ -144,6 +160,7 @@ def AccountStatusPage(request):
 
     data = {'user':user}
     return render(request, 'Account/Login/AccountStatusPage.html', data)
+
 
 
 
@@ -194,12 +211,19 @@ def change_password(request):
                     messages.warning(request, "Password and Confirm Password doesn't match")
                     return redirect(request.META.get('HTTP_REFERER'))
 
-
                 else:
                     user.set_password(new_password)
                     user.save()
                     messages.success(request, 'Password Changed Successfully')
                     return redirect(request.META.get('HTTP_REFERER'))
+        
+
+        elif request.method == 'GET':
+            return redirect('Error400')
+    
+
+    else:
+        return redirect('Error403')
 
 
 
@@ -239,6 +263,14 @@ def change_account_details(request):
                 pass
 
             return redirect(request.META.get('HTTP_REFERER'))
+        
+        
+        elif request.method == 'GET':
+                return redirect('Error400')
+    
+
+    else:
+        return redirect('Error403')
 
 
 

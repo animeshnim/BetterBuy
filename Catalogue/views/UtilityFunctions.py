@@ -66,6 +66,7 @@ def change_quantity(request):
 
             return redirect(request.META.get('HTTP_REFERER'))
         
+
         else:
             return redirect('Error403')
 
@@ -190,7 +191,7 @@ def delete_wishlist(request):
         
 
         else:
-            return redirect('LoginPage')
+            return redirect('Error403')
 
 
 
@@ -214,4 +215,4 @@ def edit_wishlist(request):
         
 
         else:
-            return redirect('LoginPage')
+            return redirect('Error403')

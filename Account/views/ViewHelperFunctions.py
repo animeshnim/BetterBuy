@@ -1,7 +1,8 @@
 #Common Modules
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 
 
@@ -71,6 +72,11 @@ def ForgotPasswordRequest(request):
 
         return redirect(request.META.get('HTTP_REFERER'))
 
+    
+    elif request.method == 'GET':
+        return redirect('Error400')
+
+
 
 def ResetPassword(request):
     if request.method == 'POST':
@@ -97,6 +103,10 @@ def ResetPassword(request):
 
         else:
             return HttpResponse('Invalid Verification Token')
+    
+
+    elif request.method == 'GET':
+        return redirect('Error400')
 
 
 
@@ -190,9 +200,14 @@ def userAuthentication(request, email, password):
 
 
 def userLogout(request):
-    if request.method == 'POST':
-        logout(request)
-        messages.success(request, 'Logged Out Successfully')
-        return redirect('HomePage')
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            logout(request)
+            messages.success(request, 'Logged Out Successfully')
+            return redirect('HomePage')
+
+        elif request.method == 'GET':
+            return redirect('Error400')
+    
     else:
-        return redirect('Error400')
+        return redirect('Error403')

@@ -34,8 +34,8 @@ from Account.views import UtilityFunctions
 # URL Patterns
 urlpatterns = [
     # Public Pages
-    path('signup/', MyViews.IndividualSignUpPage, name='IndividualSignUpPage'),
-    path('login/', MyViews.LoginPage, name='LoginPage'),
+    path('signup', MyViews.IndividualSignUpPage, name='IndividualSignUpPage'),
+    path('login', MyViews.LoginPage, name='LoginPage'),
     path('login/<str:EndURL>', MyViews.LoginPage, name='LoginPageFtRedirect'),
 
 
@@ -54,16 +54,16 @@ urlpatterns = [
 
 
     # User Specific Pages
-    path('my-account/', MyViews.AccountPage, name='AccountPage'),
-    path('cart/', MyViews.CartPage, name = 'CartPage'),
-    path('my-wishlists/', MyViews.Wishlists, name = 'Wishlists'),
+    path('my-account', MyViews.AccountPage, name='AccountPage'),
+    path('my-cart', MyViews.CartPage, name = 'CartPage'),
+    path('my-wishlists', MyViews.Wishlists, name = 'Wishlists'),
     path('my-wishlists/wishlist/<str:id>', MyViews.WishlistPage, name = 'WishlistPage'),
-    path('my-orders/', MyViews.Orders, name = 'Orders'),
+    path('my-orders', MyViews.Orders, name = 'Orders'),
 
 
 
     # Utilities
-    path('logout/', ViewHelperFunctions.userLogout, name='Logout'),
+    path('logout', ViewHelperFunctions.userLogout, name='Logout'),
     path('activate/<str:token>', MyViews.MyUserAccountActivation, name='MyUserAccountActivation'),
     
     path('add-new-address', UtilityFunctions.add_new_address, name='add-new-address'),
