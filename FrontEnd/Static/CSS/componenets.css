@@ -1,9 +1,0 @@
-/* Modal */
-.overlay-bg {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
-}
-
-.modal {
-    overflow-y: auto;
-}
