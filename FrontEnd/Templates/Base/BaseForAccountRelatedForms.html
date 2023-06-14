@@ -16,8 +16,11 @@
     <!-- Line Awesome Icons -->
     <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
     
-    <!-- Tailwind Input CSS -->
+    <!-- Tailwind Output CSS -->
     <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+    <!-- Components CSS File -->
+    <link rel="stylesheet" href="{% static 'CSS/components.css' %}" />
 
 
     <!-- Page Specific CSS -->
@@ -54,5 +57,17 @@
         </section>
     </main>
 </body>
+
+
+
+<!-- Inpage Script -->
+<script>
+    {% block script %}  {% endblock %}
+</script>
+<!-- End of Inpage Script -->
+
+<!-- Components Script -->
+<script src="{% static 'components.js' %}"></script>
+<!-- End of Components Script -->
 
 </html>

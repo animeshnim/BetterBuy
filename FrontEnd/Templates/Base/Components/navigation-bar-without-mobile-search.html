@@ -7,9 +7,13 @@
                 <i id="menu-button" onclick="menu_button_action()" class="las la-bars text-4xl"></i>
                 <i id="cancel-button" onclick="cancel_button_action()" class="las la-times text-4xl hidden"></i>
             </div>
-            <div class="hidden sm:block logo text-lg min-w-max"><img src="{% static '/Images/BetterBuyLogo_1.png' %}" alt="BetterBuyLogo" class="w-[9rem]"></div>
+            <div class="hidden sm:block logo text-lg min-w-max">
+                <a href="{% url 'HomePage' %}">
+                    <img src="{% static '/Images/BetterBuyLogo_1.png' %}" alt="BetterBuyLogo" class="w-[9rem]">
+                </a>
+            </div>
             <form action="{% url 'SearchedCatalogue' %}" class="search-bar hidden sm:flex gap-1 border-2 border-black rounded-full bg-white p-1">
-                <input type="search" name="query" placeholder="Search Products" class="search-data min-w-[40ch] outline-none ml-2" required>
+                <input type="search" name="query" placeholder="Search Products" class="search-data min-w-[32ch] outline-none ml-2" required>
                 <button type="submit" class="search-button bg-yellow-400 hover:bg-yellow-300 rounded-full px-2 py-1">
                     <i class="las la-search text-xl"></i>
                 </button>
@@ -45,7 +49,7 @@
                         {% endif %}
                     </div>
                 </a>
-                <a href="{% url 'Wishlists' %}" class="{{wishlist_state}}">
+                <a href="{% url 'AllWishlists' %}" class="{{wishlist_state}}">
                     <div class="text-white hover:text-yellow-300 lg:block">
                         <div class="hidden md:block">Wishlists</div>
                         <div class="lg:hidden"><i class="las la-bookmark text-4xl text-white hover:text-yellow-300 md:hidden"></i></div>
@@ -64,36 +68,3 @@
     {% include "Base/Components/hamburger-menu.html" %}
 </section>
 <!-- End of Menu Section -->
-
-
-
-<script>
-    function menu_button_action() {
-        menu_section = document.querySelector('#menu-section');
-        menu_button = document.querySelector('#menu-button');
-        cancel_button = document.querySelector('#cancel-button');
-        main_content = document.querySelector('#main-content');
-        footer = document.querySelector('#footer');
-    
-        menu_section.classList.remove('hidden');
-        menu_button.classList.add('hidden');
-        cancel_button.classList.remove('hidden');
-        main_content.classList.add('hidden');
-        footer.classList.add('hidden');
-    }
-    
-    
-    function cancel_button_action() {
-        menu_section = document.querySelector('#menu-section');
-        menu_button = document.querySelector('#menu-button');
-        cancel_button = document.querySelector('#cancel-button');
-        main_content = document.querySelector('#main-content');
-        footer = document.querySelector('#footer');
-    
-        menu_section.classList.add('hidden');
-        menu_button.classList.remove('hidden');
-        cancel_button.classList.add('hidden');
-        main_content.classList.remove('hidden');
-        footer.classList.remove('hidden');
-    }
-</script>

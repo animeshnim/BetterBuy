@@ -131,11 +131,11 @@ elif DB == 'PROD_POSTGRESQL':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("PROD_POSTGRESQL_DB_NAME"),
-            'USER': os.environ.get("PROD_POSTGRESQL_DB_USER"),
-            'PASSWORD': os.environ.get("PROD_POSTGRESQL_DB_PASSWORD"),
-            'HOST': os.environ.get("PROD_POSTGRESQL_DB_HOST"),
-            'PORT': os.environ.get("PROD_POSTGRESQL_DB_PORT"),
+            'NAME': env("PROD_POSTGRESQL_DB_NAME"),
+            'USER': env("PROD_POSTGRESQL_DB_USER"),
+            'PASSWORD': env("PROD_POSTGRESQL_DB_PASSWORD"),
+            'HOST': env("PROD_POSTGRESQL_DB_HOST"),
+            'PORT': env("PROD_POSTGRESQL_DB_PORT"),
         }
     }
 

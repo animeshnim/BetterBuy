@@ -15,9 +15,8 @@
 <!-- End of Navigation Section -->
 
 
-
+<!-- Page Content -->
 {% block body %}
-
 <!-- Heading -->
 <header class="text-xl font-bold mb-4 hidden sm:block">My Wishlists</header>
 <!-- End of Heading -->
@@ -31,7 +30,7 @@
         
         {% else %}
         {% for wishlist in wishlists %}
-        <a href="{% url 'WishlistPage' wishlist.unique_id %}">
+        <a href="{% url 'MyWishlist' wishlist.unique_id %}">
             <div class="p-4 text-lg font-semibold bg-white rounded-lg">{{wishlist.name}}</div>
         </a>
         {% endfor %}
@@ -39,24 +38,22 @@
     </div>
     <div>
         <form action="{% url 'create-new-wishlist' %}" class="flex gap-2">
-            <input type="text" name="wishlist-name" id="wishlist-name-input" placeholder="Wishlist Name" class="hidden outline-none rounded-full px-3 py-1 bg-white" required>
-            <button type="submit" onclick="new_wishlist_button_action()" id="new-wishlist-button" class="px-3 py-2 rounded-full bg-blue-700 text-white">Create New Wishlist</button>
+            <input type="text" name="wishlist-name" id="create-wishlist-name-input" placeholder="Wishlist Name" class="hidden outline-none rounded-full px-3 py-1 bg-white" required>
+            <button type="submit" onclick="create_new_wishlist_button_action()" id="create-new-wishlist-button" class="px-3 py-2 rounded-full bg-blue-700 text-white">Create New Wishlist</button>
         </form>
     </div>
 </section>
 <!-- End of My Wishlists -->
-
 {% endblock %}
+<!-- End of Page Content -->
 
 
 
 {% block script %}
-
-function new_wishlist_button_action() {
-    let wishlist_name_input = document.querySelector('#wishlist-name-input');
-    let new_wishlist_button = document.querySelector('#new-wishlist-button');
-    wishlist_name_input.style.display = 'block';
-    new_wishlist_button.innerHTML = "Create"
+function create_new_wishlist_button_action() {
+    let create_wishlist_name_input = document.querySelector('#create-wishlist-name-input');
+    let create_new_wishlist_button = document.querySelector('#create-new-wishlist-button');
+    create_wishlist_name_input.style.display = "Block";
+    create_new_wishlist_button.innerHTML = "Create"
 }
-
 {% endblock %}

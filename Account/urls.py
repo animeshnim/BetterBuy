@@ -56,8 +56,8 @@ urlpatterns = [
     # User Specific Pages
     path('my-account', MyViews.AccountPage, name='AccountPage'),
     path('my-cart', MyViews.CartPage, name = 'CartPage'),
-    path('my-wishlists', MyViews.Wishlists, name = 'Wishlists'),
-    path('my-wishlists/wishlist/<str:id>', MyViews.WishlistPage, name = 'WishlistPage'),
+    path('my-wishlists', MyViews.AllWishlists, name = 'AllWishlists'),
+    path('my-wishlists/wishlist/<str:id>', MyViews.MyWishlist, name = 'MyWishlist'),
     path('my-orders', MyViews.Orders, name = 'Orders'),
 
 

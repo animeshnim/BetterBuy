@@ -1,7 +1,5 @@
 # Imports
-from http.client import HTTPResponse
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
 
@@ -190,7 +188,7 @@ def OrderPaymentSuccess(request):
             'Order': MyOrder,
         }
 
-        return render(request, 'Order/PaymentSuccess.html', data)
+        return render(request, 'Order/OrderSuccess.html', data)
 
 
     elif request.method == 'GET':

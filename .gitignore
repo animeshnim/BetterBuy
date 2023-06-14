@@ -6,7 +6,6 @@
 # Environments
 ProjectEnv/
 node_modules/
-package-lock.json
 
 
 # Django

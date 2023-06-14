@@ -10,7 +10,6 @@
 
 <!-- Page Content -->
 {% block body %}
-
 <form action="{% url 'PaymentPage' %}" method="post">{% csrf_token %}
     <input type="hidden" name="order-type" value="Pending">
     <input type="hidden" name="order-id" value="{{order.unique_id}}">
@@ -162,7 +161,6 @@
     </section>
     <!-- End of Proceed to Payment Button -->
 </form>
-
 {% endblock %}
 <!-- End of Page Content -->
 
@@ -181,7 +179,7 @@ function change_address_button_action() {
     }
 
     catch(error) {
-        console.log('Not Found')
+        console.log('Not Found');
     }
     
     try {
@@ -192,7 +190,7 @@ function change_address_button_action() {
     }
     
     catch(error) {
-        console.log('Not Found')
+        console.log('Not Found');
     }
 }
 

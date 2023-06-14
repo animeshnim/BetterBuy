@@ -1,251 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
+<section id="edit-address-form" data-state="closed" class="overlay fixed top-0 bottom-0 left-0 right-0 min-w-full min-h-screen z-10 overlay-bg modal">
+    <section class="flex justify-center items-center w-full">
+        <div class="p-8 bg-white min-h-[100%] w-full max-w-[40rem] rounded-lg sm:m-8 my-auto">
+            <header class="text-xl font-semibold text-center mb-8">Edit Address</header>
+            <form action="{% url 'edit-address' %}" method="post" class="flex flex-col gap-4">{% csrf_token %}
+                <!-- Hidden Inputs -->
+                <div>
+                    <input type="hidden" name="address-unique-id" id="address-unique-id-input" value="">
+                </div>
+                <!-- End of Hidden Inputs -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {% load static %}
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-
-    <style>
-        .overlay-bg {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(3px);
-        }
-
-        #address-form {
-            overflow-y: auto;
-        }
-    </style>
-</head>
-
-<body>
-    <section id="address-form" data-state="closed" class="overlay fixed top-0 bottom-0 left-0 right-0 min-w-full min-h-screen z-10 overlay-bg">
-        <section class="flex justify-center items-center w-full">
-            <div class="p-8 bg-white min-h-[100%] w-full max-w-[40rem] rounded-lg sm:m-8 my-auto">
-                <header class="text-xl font-semibold text-center mb-8">Edit Address</header>
-                <form action="{% url 'edit-address' %}" method="post" class="flex flex-col gap-4">{% csrf_token %}
-                    <!-- Hidden Inputs -->
-                    <div>
-                        <input type="hidden" name="address-unique-id" id="address-unique-id-input" value="">
+                <div class="mb-6">
+                    <header class="font-medium mb-4">Address Type</header>
+                    <div class="flex gap-2 items-center mb-2">
+                        <input type="radio" name="address-type" id="address-type-home" value="HOME" required>
+                        <label for="address-type">Home Address</label>
                     </div>
-                    <!-- End of Hidden Inputs -->
-
-                    <div class="mb-6">
-                        <header class="font-medium mb-4">Address Type</header>
-                        <div class="flex gap-2 items-center mb-2">
-                            <input type="radio" name="address-type" id="address-type-home" value="HOME" required>
-                            <label for="address-type">Home Address</label>
-                        </div>
-                        <div class="flex gap-2 items-center">
-                            <input type="radio" name="address-type" id="address-type-work" value="WORK" required>
-                            <label for="address-type">Office /Work Address</label>
-                        </div>
+                    <div class="flex gap-2 items-center">
+                        <input type="radio" name="address-type" id="address-type-work" value="WORK" required>
+                        <label for="address-type">Office /Work Address</label>
                     </div>
-                    <div>
-                        <label for="name" class="block mb-2">Name</label>
-                        <input type="text" name="name" id="name-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="contact-no" class="block mb-2">Contact No</label>
-                        <input type="text" name="contact-no" maxlength="10" id="contact-no-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="house-no" class="block mb-2">House No. / Building</label>
-                        <input type="text" name="house-no" id="house-no-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="street-or-colony" class="block mb-2">Street / Colony</label>
-                        <input type="text" name="street-or-colony" id="street-or-colony-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="landmark" class="block mb-2">Landmark</label>
-                        <input type="text" name="landmark" id="landmark-input-e" class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="pincode" class="block mb-2">Pin Code</label>
-                        <input type="text" maxlength="6" oninput="get_postal_code_details_edit_form(this)" name="pincode" id="pincode-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="area" class="block mb-2">Area</label>
-                        <select type="text" name="area" id="area-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full"></select>
-                    </div>
-                    <div>
-                        <label for="city" class="block mb-2">City</label>
-                        <input type="text" name="city" id="city-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="district" class="block mb-2">District</label>
-                        <input type="text" name="district" id="district-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div>
-                        <label for="state" class="block mb-2">State</label>
-                        <input type="text" name="state" id="state-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
-                    </div>
-                    <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="default" id="default-input-e">
-                        <label for="default" class="block mb-2">Set as Default</label>
-                    </div>
-                    <div class="mt-6 col-span-2 flex justify-between">
-                        <button type="button" onclick="close_modal_button_action()" class="block px-6 py-3 rounded-full">Cancel</button>
-                        <button type="submit" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-300 rounded-full">Update Address</button>
-                    </div>
-                </form>
-            </div>
-        </section>
+                </div>
+                <div>
+                    <label for="name" class="block mb-2">Name</label>
+                    <input type="text" name="name" id="name-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="contact-no" class="block mb-2">Contact No</label>
+                    <input type="text" name="contact-no" maxlength="10" id="contact-no-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="house-no" class="block mb-2">House No. / Building</label>
+                    <input type="text" name="house-no" id="house-no-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="street-or-colony" class="block mb-2">Street / Colony</label>
+                    <input type="text" name="street-or-colony" id="street-or-colony-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="landmark" class="block mb-2">Landmark</label>
+                    <input type="text" name="landmark" id="landmark-input-e" class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="pincode" class="block mb-2">Pin Code</label>
+                    <input type="text" maxlength="6" oninput="get_postal_code_details_edit_form(this)" name="pincode" id="pincode-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="area" class="block mb-2">Area</label>
+                    <select type="text" name="area" id="area-input-e" required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full"></select>
+                </div>
+                <div>
+                    <label for="city" class="block mb-2">City</label>
+                    <input type="text" name="city" id="city-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="district" class="block mb-2">District</label>
+                    <input type="text" name="district" id="district-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div>
+                    <label for="state" class="block mb-2">State</label>
+                    <input type="text" name="state" id="state-input-e" value="" readonly required class="outline-none rounded-full px-3 py-2 bg-neutral-100 w-full">
+                </div>
+                <div class="flex gap-1 items-center">
+                    <input type="checkbox" name="default" id="default-input-e">
+                    <label for="default" class="block mb-2">Set as Default</label>
+                </div>
+                <div class="mt-6 col-span-2 flex justify-between">
+                    <button type="button" onclick="close_modal_button_action()" class="block px-6 py-3 rounded-full">Cancel</button>
+                    <button type="submit" class="px-6 py-3 bg-yellow-400 hover:bg-yellow-300 rounded-full">Update Address</button>
+                </div>
+            </form>
+        </div>
     </section>
-</body>
-
-<script>
-    function set_value_of_address_unique_id(value) {
-        input_tag = document.querySelector('#address-unique-id-input');
-        input_tag.value = value;
-    }
-
-    function set_input_values(type, name, contact, house, street, landmark, pincode, city, district, state, selected) {
-        let address_type_input = document.querySelector('#address-type-input');
-        let name_input = document.querySelector('#name-input-e');
-        let contact_no_input = document.querySelector('#contact-no-input-e');
-        let house_no_input = document.querySelector('#house-no-input-e');
-        let street_or_colony_input = document.querySelector('#street-or-colony-input-e');
-        let landmark_input = document.querySelector('#landmark-input-e');
-        let pincode_input = document.querySelector('#pincode-input-e');
-        let city_input = document.querySelector('#city-input-e');
-        let district_input = document.querySelector('#district-input-e');
-        let state_input = document.querySelector('#state-input-e');
-        let default_input = document.querySelector('#default-input-e');
-        
-        if (type == 'HOME') {
-            let type_input = document.querySelector('#address-type-home');
-            type_input.checked = true;
-        }
-
-        else if (type == 'WORK') {
-            let type_input = document.querySelector('#address-type-work');
-            type_input.checked = true;
-        }
-
-        if (selected == 'True') {
-            default_input.checked = true;
-        }
-
-        name_input.value = name;
-        contact_no_input.value = contact;
-        house_no_input.value = house;
-        street_or_colony_input.value = street;
-        landmark_input.value = landmark;
-        pincode_input.value = pincode;
-        city_input.value = city;
-        district_input.value = district;
-        state_input.value = state;
-    }
-
-
-    function get_postal_code_details_edit_form(element) {
-        let pincode = element.value;
-
-        if (pincode.length == 6) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    let data = this.response;
-                    let data_status = JSON.parse(data)[0]['Status'];
-                    let area_input = document.querySelector('#area-input-e');
-    
-                    if (data_status == "Success") {
-                        let all_areas = JSON.parse(data)[0]['PostOffice'];
-                        
-                        let city_input = document.querySelector('#city-input-e');
-                        let district_input = document.querySelector('#district-input-e');
-                        let state_input = document.querySelector('#state-input-e');
-    
-                        city_input.value = all_areas[0]['Block'];
-                        district_input.value = all_areas[0]['District'];
-                        state_input.value = all_areas[0]['State'];
-
-                        for (area of all_areas) {
-                            area_input.insertAdjacentHTML('beforeend', `<option value="${area.Name}">${area.Name}</option>`);
-                        }
-                    }
-    
-                    else if (data_status == "Error") {
-                        area_input.innerHTML = '';
-                    }
-                }
-            };
-            
-            xhttp.open("GET", `https://api.postalpincode.in/pincode/${pincode}`, true);
-            xhttp.send();
-            console.log('awaiting response');
-        }
-
-
-        else {
-            let area_input = document.querySelector('#area-input-e');
-            area_input.innerHTML = '';
-        }
-    }
-
-
-    function prefill_area_details(pincode, area_name) {
-        let prefill_pincode = pincode;
-        let pincode_input = document.querySelector('#pincode-input-e');
-        
-
-        if (pincode_input.value == prefill_pincode) {
-            if (pincode.length == 6) {
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        let data = this.response;
-                        let data_status = JSON.parse(data)[0]['Status'];
-                        let area_input = document.querySelector('#area-input-e');
-        
-                        if (data_status == "Success") {
-                            let all_areas = JSON.parse(data)[0]['PostOffice'];
-                            
-                            let city_input = document.querySelector('#city-input-e');
-                            let district_input = document.querySelector('#district-input-e');
-                            let state_input = document.querySelector('#state-input-e');
-        
-                            city_input.value = all_areas[0]['Block'];
-                            district_input.value = all_areas[0]['District'];
-                            state_input.value = all_areas[0]['State'];
-        
-                            for (area of all_areas) {
-                                if (area_name == area.Name) {
-                                    area_input.insertAdjacentHTML('beforeend', `<option value="${area.Name}" selected>${area.Name}</option>`);
-                                }
-    
-                                else {
-                                    area_input.insertAdjacentHTML('beforeend', `<option value="${area.Name}">${area.Name}</option>`);
-                                }
-                            }
-                        }
-        
-                        else if (data_status == "Error") {
-                            area_input.innerHTML = '';
-                        }
-                    }
-                };
-                
-                xhttp.open("GET", `https://api.postalpincode.in/pincode/${pincode}`, true);
-                xhttp.send();
-                console.log('awaiting response');
-            }
-    
-    
-            else {
-                let area_input = document.querySelector('#area-input-e');
-                area_input.innerHTML = '';
-            }
-        }
-
-    }
-</script>
-
-</html>
+</section>

@@ -665,8 +665,8 @@ video {
 .min-w-\[3\.5rem\] {
   min-width: 3.5rem;
 }
-.min-w-\[40ch\] {
-  min-width: 40ch;
+.min-w-\[32ch\] {
+  min-width: 32ch;
 }
 .min-w-fit {
   min-width: -moz-fit-content;

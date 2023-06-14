@@ -300,7 +300,7 @@ def CartPage(request):
 
 
 # 3. Wishlist
-def Wishlists(request):
+def AllWishlists(request):
     user = request.user
 
     if user.is_authenticated:
@@ -310,14 +310,14 @@ def Wishlists(request):
             'wishlists': wishlists
         }
 
-        return render(request, 'Account/MyWishlists.html', data)
+        return render(request, 'Account/AllWishlists.html', data)
 
 
     else:
         return LoginPage(request, EndPoint = 'WebPage', EndURL = 'Wishlists')
 
 
-def WishlistPage(request, id):
+def MyWishlist(request, id):
     user = request.user
 
     if user.is_authenticated:
@@ -331,10 +331,10 @@ def WishlistPage(request, id):
         }
 
 
-        return render(request, 'Account/Wishlist.html', data)
+        return render(request, 'Account/MyWishlist.html', data)
 
     else:
-        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'WishlistPage')
+        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'Wishlist')
 
 
 
