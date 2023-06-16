@@ -314,7 +314,7 @@ def AllWishlists(request):
 
 
     else:
-        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'Wishlists')
+        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'AllWishlists')
 
 
 def MyWishlist(request, id):
@@ -334,7 +334,7 @@ def MyWishlist(request, id):
         return render(request, 'Account/MyWishlist.html', data)
 
     else:
-        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'Wishlist')
+        return LoginPage(request, EndPoint = 'WebPage', EndURL = 'MyWishlist')
 
 
 
