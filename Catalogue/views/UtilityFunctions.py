@@ -187,7 +187,7 @@ def delete_wishlist(request):
             else:
                 messages.error(request, f"Wishlist doesn't exists")
             
-            return redirect(request.META.get('HTTP_REFERER'))
+            return redirect('AllWishlists')
         
 
         else:
