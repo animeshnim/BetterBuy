@@ -10,7 +10,6 @@
 
 <!-- Page Content -->
 {% block body %}
-
 <form action="{% url 'PaymentPage' %}" method="post">{% csrf_token %}
     <input type="hidden" name="order-type" value="Pending">
     <input type="hidden" name="order-id" value="{{order.unique_id}}">
@@ -120,12 +119,16 @@
                             <div>Rs. {{order.total_amount}}</div>
                         </div>
                         <div class="flex justify-between">
-                            <div>Shipping Charges</div>
-                            <div>+ Rs. ________ </div>
-                        </div>
-                        <div class="flex justify-between">
                             <div>Discount</div>
                             <div class="text-green-700">- Rs. {{order.discount_amount}} </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Shipping Charges</div>
+                            <div>+ Rs. 0 </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div>Additional Discounts</div>
+                            <div class="text-green-700">- Rs. 0 </div>
                         </div>
                     </div>
                     <!-- End of Particulars -->
@@ -162,7 +165,6 @@
     </section>
     <!-- End of Proceed to Payment Button -->
 </form>
-
 {% endblock %}
 <!-- End of Page Content -->
 
@@ -181,7 +183,7 @@ function change_address_button_action() {
     }
 
     catch(error) {
-        console.log('Not Found')
+        console.log('Not Found');
     }
     
     try {
@@ -192,7 +194,7 @@ function change_address_button_action() {
     }
     
     catch(error) {
-        console.log('Not Found')
+        console.log('Not Found');
     }
 }
 

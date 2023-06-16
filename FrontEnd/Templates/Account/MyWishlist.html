@@ -16,9 +16,8 @@
 <!-- End of Navigation Section -->
 
 
-
+<!-- Page Content -->
 {% block body %}
-
 <section>
     <!-- Header -->
     <form action="{% url 'edit-wishlist' %}" class="flex justify-between items-center mb-4">
@@ -90,12 +89,12 @@
     </section>
     <!-- End of Wishlist Items -->
 </section>
-
 {% endblock %}
+<!-- End of Page Content -->
+
 
 
 {% block script %}
-
 function edit_wishlist_button_action(){
     let ok_button = document.querySelector('#ok-button');
     let cancel_button = document.querySelector('#cancel-edit-button');

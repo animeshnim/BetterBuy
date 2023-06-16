@@ -3,18 +3,30 @@ from django.shortcuts import render, redirect
 
 
 
+# Model Imports
 from Catalogue.models import *
+from Account.models import *
 
 
 
 # Create your views here.
 def Index(request):
+    user = request.user
     categories = ProductCategory.objects.all()
 
-    data = {
-        'categories' : categories,
-    }
-    
+    if user.is_authenticated:
+        wishlists = Wishlist.objects.filter(user = user)
+
+        data = {
+            'categories' : categories,
+            'wishlists': wishlists,
+        }
+
+    else:
+        data = {
+            'categories' : categories,
+        }
+        
     return render(request, 'BetterBuy/HomePage.html', data)
 
 

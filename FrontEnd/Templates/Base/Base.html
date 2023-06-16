@@ -16,8 +16,11 @@
     <!-- Line Awesome Icons -->
     <link rel="stylesheet" href="{% static 'CSS/LineAwesomeIcons/css/line-awesome.css' %}" />
     
-    <!-- Tailwind Input CSS -->
+    <!-- Tailwind Output CSS -->
     <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+
+    <!-- Components CSS File -->
+    <link rel="stylesheet" href="{% static 'CSS/components.css' %}" />
 
 
     <!-- Page Specific CSS -->
@@ -50,25 +53,16 @@
     <!-- End of Footer Section -->
 </body>
 
+
+
+<!-- Inpage Script -->
 <script>
     {% block script %}  {% endblock %}
-
-    function open_modal_button_action(element_id) {
-        let modal = document.querySelector(`#${element_id}`);
-        modal.classList.add('flex');
-        modal.classList.remove('hidden');
-        modal.setAttribute("data-state", "opened");
-    }
-    
-    function close_modal_button_action() {
-        let modals = document.querySelectorAll('[data-state="opened"]');
-    
-        for (modal of modals) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            modal.setAttribute("data-state", "closed");
-        }
-    }
 </script>
+<!-- End of Inpage Script -->
+
+<!-- Components Script -->
+<script src="{% static 'components.js' %}"></script>
+<!-- End of Components Script -->
 
 </html>
