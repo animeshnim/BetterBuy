@@ -20,16 +20,26 @@ function menu_button_action() {
     menu_section = document.querySelector('#menu-section');
     menu_button = document.querySelector('#menu-button');
     cancel_button = document.querySelector('#cancel-button');
-    secondary_navbar = document.querySelector('#secondary-navbar');
     main_content = document.querySelector('#main-content');
-    footer = document.querySelector('#footer');
-
+    
     menu_section.classList.remove('hidden');
     menu_button.classList.add('hidden');
     cancel_button.classList.remove('hidden');
-    secondary_navbar.classList.add('hidden');
     main_content.classList.add('hidden');
-    footer.classList.add('hidden');
+    
+    try {
+        secondary_navbar = document.querySelector('#secondary-navbar');
+        secondary_navbar.classList.add('hidden');
+    }catch {
+        console.log('Not Found');
+    }
+    
+    try {    
+        footer = document.querySelector('#footer');
+        footer.classList.add('hidden');
+    }catch {
+        console.log('Not Found');
+    }
 }
 
 
@@ -37,16 +47,27 @@ function cancel_button_action() {
     menu_section = document.querySelector('#menu-section');
     menu_button = document.querySelector('#menu-button');
     cancel_button = document.querySelector('#cancel-button');
-    secondary_navbar = document.querySelector('#secondary-navbar');
     main_content = document.querySelector('#main-content');
-    footer = document.querySelector('#footer');
-
+    
     menu_section.classList.add('hidden');
     menu_button.classList.remove('hidden');
     cancel_button.classList.add('hidden');
-    secondary_navbar.classList.remove('hidden');
     main_content.classList.remove('hidden');
-    footer.classList.remove('hidden');
+    
+    try {        
+        secondary_navbar = document.querySelector('#secondary-navbar');
+        secondary_navbar.classList.remove('hidden');
+    }catch {
+        console.log('Not Found');
+    }
+    
+    
+    try {        
+        footer = document.querySelector('#footer');
+        footer.classList.remove('hidden'); 
+    }catch {
+        console.log('Not Found');
+    }
 }
 
 
